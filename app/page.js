@@ -137,141 +137,99 @@ export default function Home() {
         </div>
       </header>
 
-      <section style={{padding: '60px 24px', maxWidth: '1152px', margin: '0 auto'}}>
-        <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '48px', alignItems: 'center'}}>
-          <div>
-            <h1 style={{fontSize: '42px', fontWeight: '900', color: '#7c2d12', marginBottom: '20px', lineHeight: '1.1'}}>
-              Africa's Phone.<br/>
-              Africa's Opinions.<br/>
-              <span style={{color: '#ea580c'}}>Africa's Mulla.</span>
-            </h1>
-            <p style={{fontSize: '17px', color: '#9a3412', marginBottom: '32px', lineHeight: '1.6'}}>
-              Tired of not available in your country? MullaBase pays users across Africa to vote, shop, and share.
-              Starting in Lesotho, SA and Botswana. No VPN bans. No waiting lists.
-            </p>
+      <section style={{padding: '60px 24px', maxWidth: '600px', margin: '0 auto'}}>
+        <h1 style={{fontSize: '42px', fontWeight: '900', color: '#7c2d12', marginBottom: '20px', lineHeight: '1.1', textAlign: 'center'}}>
+          Africa's Phone.<br/>
+          Africa's Opinions.<br/>
+          <span style={{color: '#ea580c'}}>Africa's Mulla.</span>
+        </h1>
+        <p style={{fontSize: '17px', color: '#9a3412', marginBottom: '32px', lineHeight: '1.6', textAlign: 'center'}}>
+          Tired of not available in your country? MullaBase pays users across Africa to vote, shop, and share.
+          Starting in Lesotho, SA and Botswana.
+        </p>
 
-            <div style={{backgroundColor: 'white', padding: '20px', borderRadius: '16px', border: '2px solid #fed7aa', boxShadow: '0 4px 12px rgba(234, 88, 12, 0.1)'}}>
-              <div style={{fontSize: '14px', fontWeight: '700', color: '#c2410c', marginBottom: '12px'}}>JOIN {count.toLocaleString()}+ AFRICANS EARNING</div>
+        <div style={{backgroundColor: 'white', padding: '20px', borderRadius: '16px', border: '2px solid #fed7aa', boxShadow: '0 4px 12px rgba(234, 88, 12, 0.1)'}}>
+          <div style={{fontSize: '14px', fontWeight: '700', color: '#c2410c', marginBottom: '12px', textAlign: 'center'}}>JOIN {count.toLocaleString()}+ AFRICANS EARNING</div>
 
-              {!userData? (
-                <form onSubmit={handleSubmit}>
+          {!userData? (
+            <form onSubmit={handleSubmit}>
+              <select
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
+                style={{width: '100%', padding: '14px 16px', borderRadius: '10px', border: '2px solid #fed7aa', marginBottom: '12px', fontSize: '16px', boxSizing: 'border-box', backgroundColor: 'white'}}
+              >
+                <option value="LS">Lesotho</option>
+                <option value="ZA">South Africa</option>
+                <option value="BW">Botswana</option>
+              </select>
+              <input
+                type="email"
+                placeholder="Your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                style={{width: '100%', padding: '14px 16px', borderRadius: '10px', border: '2px solid #fed7aa', marginBottom: '12px', fontSize: '16px', boxSizing: 'border-box'}}
+              />
+              <button
+                type="submit"
+                disabled={status === 'Joining...'}
+                style={{width: '100%', backgroundColor: status === 'Joining...'? '#fb923c' : '#ea580c', color: 'white', padding: '14px 24px', borderRadius: '10px', fontWeight: '800', border: 'none', fontSize: '16px', cursor: status === 'Joining...'? 'not-allowed' : 'pointer'}}
+              >
+                {status === 'Joining...'? 'Joining...' : `Claim Your Base + ${currency}2 Free`}
+              </button>
+            </form>
+          ) : (
+            <div>
+              <div style={{backgroundColor: '#f0fdf4', padding: '16px', borderRadius: '10px', marginBottom: '16px', border: '1px solid #bbf7d0'}}>
+                <div style={{fontSize: '12px', color: '#15803d', fontWeight: '700', marginBottom: '4px'}}>YOUR MULLA BALANCE</div>
+                <div style={{fontSize: '28px', fontWeight: '900', color: '#15803d'}}>{userData.points || 0} points</div>
+                <div style={{fontSize: '13px', color: '#16a34a', marginTop: '4px'}}>
+                  {userData.points >= 200? `${currency}20 cashout unlocked!` : `${200 - (userData.points || 0)} points to ${currency}20`}
+                </div>
+              </div>
+
+              {userData.points >= 200 &&!userData.cashout_requested &&!userData.paid && (
+                <div>
                   <select
-                    value={country}
-                    onChange={(e) => setCountry(e.target.value)}
+                    value={payoutMethod}
+                    onChange={(e) => setPayoutMethod(e.target.value)}
                     style={{width: '100%', padding: '14px 16px', borderRadius: '10px', border: '2px solid #fed7aa', marginBottom: '12px', fontSize: '16px', boxSizing: 'border-box', backgroundColor: 'white'}}
                   >
-                    <option value="LS">Lesotho</option>
-                    <option value="ZA">South Africa</option>
-                    <option value="BW">Botswana</option>
+                    {PAYOUTS[userData.country_code || 'LS'].methods.map(m => (
+                      <option key={m} value={m}>{m}</option>
+                    ))}
                   </select>
                   <input
-                    type="email"
-                    placeholder="Your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
+                    type="tel"
+                    placeholder={payoutMethod === 'Bank EFT'? 'Account number' : 'Phone number'}
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
                     style={{width: '100%', padding: '14px 16px', borderRadius: '10px', border: '2px solid #fed7aa', marginBottom: '12px', fontSize: '16px', boxSizing: 'border-box'}}
                   />
                   <button
-                    type="submit"
-                    disabled={status === 'Joining...'}
-                    style={{width: '100%', backgroundColor: status === 'Joining...'? '#fb923c' : '#ea580c', color: 'white', padding: '14px 24px', borderRadius: '10px', fontWeight: '800', border: 'none', fontSize: '16px', cursor: status === 'Joining...'? 'not-allowed' : 'pointer'}}
+                    onClick={handleCashout}
+                    style={{width: '100%', backgroundColor: '#16a34a', color: 'white', padding: '14px 24px', borderRadius: '10px', fontWeight: '800', border: 'none', fontSize: '16px', cursor: 'pointer'}}
                   >
-                    {status === 'Joining...'? 'Joining...' : `Claim Your Base + ${currency}2 Free`}
+                    Cash Out {currency}20 via {payoutMethod}
                   </button>
-                </form>
-              ) : (
-                <div>
-                  <div style={{backgroundColor: '#f0fdf4', padding: '16px', borderRadius: '10px', marginBottom: '16px', border: '1px solid #bbf7d0'}}>
-                    <div style={{fontSize: '12px', color: '#15803d', fontWeight: '700', marginBottom: '4px'}}>YOUR MULLA BALANCE</div>
-                    <div style={{fontSize: '28px', fontWeight: '900', color: '#15803d'}}>{userData.points || 0} points</div>
-                    <div style={{fontSize: '13px', color: '#16a34a', marginTop: '4px'}}>
-                      {userData.points >= 200? `${currency}20 cashout unlocked!` : `${200 - (userData.points || 0)} points to ${currency}20`}
-                    </div>
-                  </div>
-
-                  {userData.points >= 200 &&!userData.cashout_requested &&!userData.paid && (
-                    <div>
-                      <select
-                        value={payoutMethod}
-                        onChange={(e) => setPayoutMethod(e.target.value)}
-                        style={{width: '100%', padding: '14px 16px', borderRadius: '10px', border: '2px solid #fed7aa', marginBottom: '12px', fontSize: '16px', boxSizing: 'border-box', backgroundColor: 'white'}}
-                      >
-                        {PAYOUTS[userData.country_code || 'LS'].methods.map(m => (
-                          <option key={m} value={m}>{m}</option>
-                        ))}
-                      </select>
-                      <input
-                        type="tel"
-                        placeholder={payoutMethod === 'Bank EFT'? 'Account number' : 'Phone number'}
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        style={{width: '100%', padding: '14px 16px', borderRadius: '10px', border: '2px solid #fed7aa', marginBottom: '12px', fontSize: '16px', boxSizing: 'border-box'}}
-                      />
-                      <button
-                        onClick={handleCashout}
-                        style={{width: '100%', backgroundColor: '#16a34a', color: 'white', padding: '14px 24px', borderRadius: '10px', fontWeight: '800', border: 'none', fontSize: '16px', cursor: 'pointer'}}
-                      >
-                        Cash Out {currency}20 via {payoutMethod}
-                      </button>
-                    </div>
-                  )}
-
-                  {userData.cashout_requested &&!userData.paid && (
-                    <div style={{backgroundColor: '#fef3c7', padding: '12px', borderRadius: '8px', fontSize: '14px', color: '#92400e', fontWeight: '600', textAlign: 'center'}}>
-                      Cashout pending. We’ll send {currency}20 via {userData.payout_method} within 24hrs.
-                    </div>
-                  )}
-
-                  {userData.paid && (
-                    <div style={{backgroundColor: '#dcfce7', padding: '12px', borderRadius: '8px', fontSize: '14px', color: '#15803d', fontWeight: '600', textAlign: 'center'}}>
-                      Paid! Check your {userData.payout_method}. Earn more to cash out again.
-                    </div>
-                  )}
                 </div>
               )}
 
-              {status && status!== 'Joining...' &&!userData && (
-                <p style={{fontSize: '14px', color: status.includes('Welcome') || status.includes('already')? '#16a34a' : '#dc2626', marginTop: '12px', textAlign: 'center', fontWeight: '600'}}>{status}</p>
+              {userData.cashout_requested &&!userData.paid && (
+                <div style={{backgroundColor: '#fef3c7', padding: '12px', borderRadius: '8px', fontSize: '14px', color: '#92400e', fontWeight: '600', textAlign: 'center'}}>
+                  Cashout pending. We’ll send {currency}20 via {userData.payout_method} within 24hrs.
+                </div>
               )}
-              <p style={{fontSize: '12px', color: '#9a3412', marginTop: '10px', textAlign: 'center'}}>Free to join. {currency}20 min cashout. LS, ZA, BW first.</p>
-            </div>
-          </div>
 
-          <div style={{backgroundColor: 'white', padding: '32px', borderRadius: '20px', border: '2px solid #fed7aa'}}>
-            <div style={{fontSize: '16px', fontWeight: '800', color: '#7c2d12', marginBottom: '24px', textAlign: 'center'}}>HOW MULLA FLOWS TO YOU</div>
-            <div style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
-              <div style={{display: 'flex', gap: '16px', alignItems: 'start'}}>
-                <div style={{backgroundColor: '#ffedd5', color: '#c2410c', fontWeight: '900', fontSize: '18px', minWidth: '36px', height: '36px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>1</div>
-                <div>
-                  <div style={{fontWeight: '700', color: '#7c2d12', marginBottom: '4px'}}>Join + Get {currency}2 Free</div>
-                  <div style={{fontSize: '14px', color: '#9a3412'}}>20 bonus points just for signing up. Start earning instantly.</div>
+              {userData.paid && (
+                <div style={{backgroundColor: '#dcfce7', padding: '12px', borderRadius: '8px', fontSize: '14px', color: '#15803d', fontWeight: '600', textAlign: 'center'}}>
+                  Paid! Check your {userData.payout_method}. Earn more to cash out again.
                 </div>
-              </div>
-              <div style={{display: 'flex', gap: '16px', alignItems: 'start'}}>
-                <div style={{backgroundColor: '#ffedd5', color: '#c2410c', fontWeight: '900', fontSize: '18px', minWidth: '36px', height: '36px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>2</div>
-                <div>
-                  <div style={{fontWeight: '700', color: '#7c2d12', marginBottom: '4px'}}>Vote + Shop Partners</div>
-                  <div style={{fontSize: '14px', color: '#9a3412'}}>5 pts per vote. 40+ pts per order via Takealot, Pick n Pay, Vodacom.</div>
-                </div>
-              <div style={{display: 'flex', gap: '16px', alignItems: 'start'}}>
-                <div style={{backgroundColor: '#ffedd5', color: '#c2410c', fontWeight: '900', fontSize: '18px', minWidth: '36px', height: '36px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>3</div>
-                <div>
-                  <div style={{fontWeight: '700', color: '#7c2d12', marginBottom: '4px'}}>Cash Out {currency}20 Instantly</div>
-                  <div style={{fontSize: '14px', color: '#9a3412'}}>Hit 200 points. Pick M-Pesa, eWallet, or Bank. Paid within 24hrs.</div>
-                </div>
-              </div>
+              )}
             </div>
-          </div>
-        </div>
-      </section>
+          )}
 
-      <footer style={{padding: '36px 24px', textAlign: 'center', fontSize: '14px', color: '#9a3412', backgroundColor: '#fffbeb'}}>
-        <p style={{fontWeight: '800', color: '#7c2d12'}}>2026 MullaBase. Built in Maseru for Africa</p>
-        <p style={{fontSize: '12px', color: '#c2410c', marginTop: '20px', maxWidth: '650px', margin: '20px auto 0'}}>
-          Rewards program. 100 points = {currency}10. Min cashout {currency}20. Not employment or guaranteed income.
-        </p>
-      </footer>
-    </div>
-  )
-  }
+          {status && status!== 'Joining...' &&!userData && (
+            <p style={{fontSize: '14px', color: status.includes('Welcome') || status.includes('already')? '#16a34a' : '#dc2626', marginTop: '12px', textAlign: 'center', fontWeight: '600'}}>{status}</p>
+          )}
+          <p style={{fontSize: '12px', color: '#9a3412', marginTop: '10px', textAlign: 'center'}}>Free to join
