@@ -144,12 +144,13 @@ export default function Home() {
           <span style={{color: '#ea580c'}}>Africa's Mulla.</span>
         </h1>
         <p style={{fontSize: '17px', color: '#9a3412', marginBottom: '32px', lineHeight: '1.6', textAlign: 'center'}}>
-          Tired of not available in your country? MullaBase pays users across Africa to vote, shop, and share.
-          Starting in Lesotho, SA and Botswana.
+          MullaBase pays users across Africa to vote, shop, and share. Starting in Lesotho, SA and Botswana.
         </p>
 
         <div style={{backgroundColor: 'white', padding: '20px', borderRadius: '16px', border: '2px solid #fed7aa', boxShadow: '0 4px 12px rgba(234, 88, 12, 0.1)'}}>
-          <div style={{fontSize: '14px', fontWeight: '700', color: '#c2410c', marginBottom: '12px', textAlign: 'center'}}>JOIN {count.toLocaleString()}+ AFRICANS EARNING</div>
+          <div style={{fontSize: '14px', fontWeight: '700', color: '#c2410c', marginBottom: '12px', textAlign: 'center'}}>
+            JOIN {count.toLocaleString()}+ AFRICANS EARNING
+          </div>
 
           {!userData? (
             <form onSubmit={handleSubmit}>
@@ -229,7 +230,4 @@ export default function Home() {
             </div>
           )}
 
-          {status && status!== 'Joining...' &&!userData && (
-            <p style={{fontSize: '14px', color: status.includes('Welcome') || status.includes('already')? '#16a34a' : '#dc2626', marginTop: '12px', textAlign: 'center', fontWeight: '600'}}>{status}</p>
-          )}
-          <p style={{fontSize: '12px', color: '#9a3412', marginTop: '10px', textAlign: 'center'}}>Free to join
+          <div style={{fontSize: '14px', color: status.includes('Welcome') || status.includes('already')? '#16a34a' : '#dc2626', marginTop: '12px', textAlign: 'center',
