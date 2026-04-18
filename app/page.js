@@ -60,7 +60,6 @@ export default function Home() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setStatus('Joining...')
-
     try {
       const res = await fetch(`${SUPABASE_URL}/rest/v1/leads`, {
         method: 'POST',
@@ -77,7 +76,6 @@ export default function Home() {
           points: 20
         })
       })
-
       if (res.status === 201) {
         const data = await res.json()
         setStatus('Welcome to the Base')
@@ -103,7 +101,6 @@ export default function Home() {
       alert(`Enter valid ${payoutMethod} number`)
       return
     }
-
     try {
       const res = await fetch(`${SUPABASE_URL}/rest/v1/leads?email=eq.${userData.email}`, {
         method: 'PATCH',
@@ -118,7 +115,6 @@ export default function Home() {
           cashout_requested: true
         })
       })
-
       if(res.ok) {
         setUserData({...userData, cashout_requested: true, phone: phone, payout_method: payoutMethod})
         alert(`Cashout requested! We will send ${PAYOUTS[country].currency}20 via ${payoutMethod} within 24hrs.`)
@@ -164,9 +160,9 @@ export default function Home() {
                     onChange={(e) => setCountry(e.target.value)}
                     style={{width: '100%', padding: '14px 16px', borderRadius: '10px', border: '2px solid #fed7aa', marginBottom: '12px', fontSize: '16px', boxSizing: 'border-box', backgroundColor: 'white'}}
                   >
-                    <option value="LS">🇱🇸 Lesotho</option>
-                    <option value="ZA">🇿🇦 South Africa</option>
-                    <option value="BW">🇧🇼 Botswana</option>
+                    <option value="LS">Lesotho</option>
+                    <option value="ZA">South Africa</option>
+                    <option value="BW">Botswana</option>
                   </select>
                   <input
                     type="email"
@@ -238,4 +234,44 @@ export default function Home() {
               {status && status!== 'Joining...' &&!userData && (
                 <p style={{fontSize: '14px', color: status.includes('Welcome') || status.includes('already')? '#16a34a' : '#dc2626', marginTop: '12px', textAlign: 'center', fontWeight: '600'}}>{status}</p>
               )}
-              <p style={{fontSize: '12px', color: '#9a3412', marginTop: '10px
+              <p style={{fontSize: '12px', color: '#9a3412', marginTop: '10px', textAlign: 'center'}}>Free to join. {currency}20 min cashout. LS, ZA, BW first.</p>
+            </div>
+          </div>
+
+          <div style={{backgroundColor: 'white', padding: '32px', borderRadius: '20px', border: '2px solid #fed7aa'}}>
+            <div style={{fontSize: '16px', fontWeight: '800', color: '#7c2d12', marginBottom: '24px', textAlign: 'center'}}>HOW MULLA FLOWS TO YOU</div>
+            <div style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
+              <div style={{display: 'flex', gap: '16px', alignItems: 'start'}}>
+                <div style={{backgroundColor: '#ffedd5', color: '#c2410c', fontWeight: '900', fontSize: '18px', minWidth: '36px', height: '36px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>1</div>
+                <div>
+                  <div style={{fontWeight: '700', color: '#7c2d12', marginBottom: '4px'}}>Join + Get {currency}2 Free</div>
+                  <div style={{fontSize: '14px', color: '#9a3412'}}>20 bonus points just for signing up. Start earning instantly.</div>
+                </div>
+              </div>
+              <div style={{display: 'flex', gap: '16px', alignItems: 'start'}}>
+                <div style={{backgroundColor: '#ffedd5', color: '#c2410c', fontWeight: '900', fontSize: '18px', minWidth: '36px', height: '36px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>2</div>
+                <div>
+                  <div style={{fontWeight: '700', color: '#7c2d12', marginBottom: '4px'}}>Vote + Shop Partners</div>
+                  <div style={{fontSize: '14px', color: '#9a3412'}}>5 pts per vote. 40+ pts per order via Takealot, Pick n Pay, Vodacom.</div>
+                </div>
+              <div style={{display: 'flex', gap: '16px', alignItems: 'start'}}>
+                <div style={{backgroundColor: '#ffedd5', color: '#c2410c', fontWeight: '900', fontSize: '18px', minWidth: '36px', height: '36px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>3</div>
+                <div>
+                  <div style={{fontWeight: '700', color: '#7c2d12', marginBottom: '4px'}}>Cash Out {currency}20 Instantly</div>
+                  <div style={{fontSize: '14px', color: '#9a3412'}}>Hit 200 points. Pick M-Pesa, eWallet, or Bank. Paid within 24hrs.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer style={{padding: '36px 24px', textAlign: 'center', fontSize: '14px', color: '#9a3412', backgroundColor: '#fffbeb'}}>
+        <p style={{fontWeight: '800', color: '#7c2d12'}}>2026 MullaBase. Built in Maseru for Africa</p>
+        <p style={{fontSize: '12px', color: '#c2410c', marginTop: '20px', maxWidth: '650px', margin: '20px auto 0'}}>
+          Rewards program. 100 points = {currency}10. Min cashout {currency}20. Not employment or guaranteed income.
+        </p>
+      </footer>
+    </div>
+  )
+  }
