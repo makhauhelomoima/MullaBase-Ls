@@ -1,5 +1,5 @@
 "use client"
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const SUPABASE_URL = 'https://oejctbtkqsyxjpgnljac.supabase.co'
 const SUPABASE_KEY = 'sb_publishable_rsHcUSNFJ6CuGc2_zDtvlA_8CCHXhUo'
@@ -7,6 +7,21 @@ const SUPABASE_KEY = 'sb_publishable_rsHcUSNFJ6CuGc2_zDtvlA_8CCHXhUo'
 export default function Home() {
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState('')
+  const [count, setCount] = useState(2000) // starts at 2000 for social proof
+
+  useEffect(() => {
+    // Get real count from Supabase
+    fetch(`${SUPABASE_URL}/rest/v1/leads?select=id`, {
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Prefer': 'count=exact'
+      }
+    }).then(res => {
+      const total = res.headers.get('content-range')?.split('/')[1]
+      if(total) setCount(2000 + parseInt(total)) // 2000 base + real signups
+    }).catch(() => {})
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -27,6 +42,7 @@ export default function Home() {
       if (res.status === 201) {
         setStatus('Welcome to the Base')
         setEmail('')
+        setCount(prev => prev + 1) // bump counter live
       } else if (res.status === 409) {
         setStatus('You are already on the list!')
         setEmail('')
@@ -63,7 +79,7 @@ export default function Home() {
             </p>
             
             <div style={{backgroundColor: 'white', padding: '20px', borderRadius: '16px', border: '2px solid #fed7aa', boxShadow: '0 4px 12px rgba(234, 88, 12, 0.1)'}}>
-              <div style={{fontSize: '14px', fontWeight: '700', color: '#c2410c', marginBottom: '12px'}}>JOIN 2000+ AFRICANS EARNING</div>
+              <div style={{fontSize: '14px', fontWeight: '700', color: '#c2410c', marginBottom: '12px'}}>JOIN {count.toLocaleString()}+ AFRICANS EARNING</div>
               <form onSubmit={handleSubmit}>
                 <input 
                   type="email" 
@@ -76,13 +92,13 @@ export default function Home() {
                 <button 
                   type="submit"
                   disabled={status === 'Joining...'}
-                  style={{width: '100%', backgroundColor: status === 'Joining...' ? '#fb923c' : '#ea580c', color: 'white', padding: '14px 24px', borderRadius: '10px', fontWeight: '800', border: 'none', fontSize: '16px', cursor: status === 'Joining...' ? 'not-allowed' : 'pointer'}}
+                  style={{width: '100%', backgroundColor: status === 'Joining...'? '#fb923c' : '#ea580c', color: 'white', padding: '14px 24px', borderRadius: '10px', fontWeight: '800', border: 'none', fontSize: '16px', cursor: status === 'Joining...'? 'not-allowed' : 'pointer'}}
                 >
-                  {status === 'Joining...' ? 'Joining...' : 'Claim Your Base'}
+                  {status === 'Joining...'? 'Joining...' : 'Claim Your Base'}
                 </button>
               </form>
-              {status && status !== 'Joining...' && (
-                <p style={{fontSize: '14px', color: status.includes('Welcome') || status.includes('already') ? '#16a34a' : '#dc2626', marginTop: '12px', textAlign: 'center', fontWeight: '600'}}>{status}</p>
+              {status && status!== 'Joining...' && (
+                <p style={{fontSize: '14px', color: status.includes('Welcome') || status.includes('already')? '#16a34a' : '#dc2626', marginTop: '12px', textAlign: 'center', fontWeight: '600'}}>{status}</p>
               )}
               <p style={{fontSize: '12px', color: '#9a3412', marginTop: '10px', textAlign: 'center'}}>Free to join. Available in LS, ZA, BW first.</p>
             </div>
@@ -166,4 +182,4 @@ export default function Home() {
       </footer>
     </div>
   )
-         }
+          }
