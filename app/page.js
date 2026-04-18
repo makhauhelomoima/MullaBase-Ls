@@ -1,6 +1,9 @@
 "use client"
 import { useState } from 'react'
 
+const SUPABASE_URL = 'https://oejctbtkqsyxjpgnljac.supabase.co'
+const SUPABASE_KEY = 'sb_publishable_rsHcUSNFJ6CuGc2_zDtvlA_8CCHXhUo'
+
 export default function Home() {
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState('')
@@ -8,10 +11,31 @@ export default function Home() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setStatus('Joining...')
-    setTimeout(() => {
-      setStatus('Welcome to the Base')
-      setEmail('')
-    }, 800)
+    
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/leads`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({ email: email, country: 'LS' })
+      })
+
+      if (res.status === 201) {
+        setStatus('Welcome to the Base')
+        setEmail('')
+      } else if (res.status === 409) {
+        setStatus('You are already on the list!')
+        setEmail('')
+      } else {
+        setStatus('Try again in a moment')
+      }
+    } catch (error) {
+      setStatus('Check connection and try again')
+    }
   }
 
   return (
@@ -58,7 +82,7 @@ export default function Home() {
                 </button>
               </form>
               {status && status !== 'Joining...' && (
-                <p style={{fontSize: '14px', color: '#16a34a', marginTop: '12px', textAlign: 'center', fontWeight: '600'}}>{status}</p>
+                <p style={{fontSize: '14px', color: status.includes('Welcome') || status.includes('already') ? '#16a34a' : '#dc2626', marginTop: '12px', textAlign: 'center', fontWeight: '600'}}>{status}</p>
               )}
               <p style={{fontSize: '12px', color: '#9a3412', marginTop: '10px', textAlign: 'center'}}>Free to join. Available in LS, ZA, BW first.</p>
             </div>
@@ -142,4 +166,4 @@ export default function Home() {
       </footer>
     </div>
   )
-                }
+    }
