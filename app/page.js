@@ -140,14 +140,18 @@ export default function Home() {
       <section style={{padding: '60px 24px', maxWidth: '1152px', margin: '0 auto'}}>
         <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '48px', alignItems: 'center'}}>
           <div>
-            <h1 style={{fontSize: '42px', fontWeight: '900', color: '#7c2d12', marginBottom: '20px', lineHeight: '1.1'}}>
+            <h1 style={{fontSize: '42px', fontWeight: '900', color: '#7c2d12', marginBottom: '12px', lineHeight: '1.1'}}>
               Africa's Phone.<br/>
               Africa's Opinions.<br/>
               <span style={{color: '#ea580c'}}>Africa's Mulla.</span>
             </h1>
+            <div style={{fontSize: '16px', fontWeight: '700', color: '#c2410c', marginBottom: '20px', letterSpacing: '0.5px'}}>
+              Instant Marketplace | Spend & Earn
+            </div>
             <p style={{fontSize: '17px', color: '#9a3412', marginBottom: '32px', lineHeight: '1.6'}}>
-              Tired of not available in your country? MullaBase pays users across Africa to vote, shop, and share.
-              Starting in Lesotho, SA and Botswana. No VPN bans. No waiting lists.
+              MullaBase pays users across Africa to vote, shop, and share.
+              Earn points for your opinions and purchases. Cash out instantly to M-Pesa, eWallet, or Bank.
+              Starting in Lesotho, South Africa, and Botswana.
             </p>
 
             <div style={{backgroundColor: 'white', padding: '20px', borderRadius: '16px', border: '2px solid #fed7aa', boxShadow: '0 4px 12px rgba(234, 88, 12, 0.1)'}}>
@@ -282,4 +286,4 @@ export default function Home() {
       </footer>
     </div>
   )
-                                                  }
+       }
