@@ -114,6 +114,10 @@ export default function Home() {
       alert(`Enter valid ${payoutMethod} number`)
       return
     }
+    if((userData.points || 0) < 200) {
+      alert('Need 200 points to cash out')
+      return
+    }
     try {
       const res = await fetch(`${SUPABASE_URL}/rest/v1/leads?email=eq.${userData.email}`, {
         method: 'PATCH',
@@ -125,12 +129,13 @@ export default function Home() {
         body: JSON.stringify({
           phone: phone,
           payout_method: payoutMethod,
-          cashout_requested: true
+          cashout_requested: true,
+          points: (userData.points || 0) - 200
         })
       })
       if(res.ok) {
-        setUserData({...userData, cashout_requested: true, phone: phone, payout_method: payoutMethod})
-        alert(`Cashout requested! We will send ${PAYOUTS[country].currency}20 via ${payoutMethod} within 24hrs.`)
+        setUserData({...userData, cashout_requested: true, phone: phone, payout_method: payoutMethod, points: (userData.points || 0) - 200})
+        alert(`Cashout requested! We will send ${PAYOUTS[country].currency}20 via ${payoutMethod} within 24hrs. 200 points deducted.`)
       }
     } catch {
       alert('Error. Try again.')
@@ -145,6 +150,16 @@ export default function Home() {
     }
     const message = `Hi Masterclass! I found you on MullaBase. I want to book accommodation. My email: ${userData.email}. MullaBase ID: ${userData.id}`
     window.open(`https://wa.me/26658421001?text=${encodeURIComponent(message)}`, '_blank')
+  }
+
+  const handleMullaBaseStore = () => {
+    if(!userData) {
+      alert('Join MullaBase first to shop')
+      setShowJoinForm(true)
+      return
+    }
+    const message = `Hi! I found MullaBase Store on MullaBase. I want to see what you sell. My email: ${userData.email}. MullaBase ID: ${userData.id}`
+    window.open(`https://wa.me/26657031600?text=${encodeURIComponent(message)}`, '_blank')
   }
 
   const addPoints = async (amount, reason) => {
@@ -223,6 +238,13 @@ export default function Home() {
             style={{backgroundColor: '#ea580c', color: 'white', padding: '14px 8px', borderRadius: '8px', fontWeight: '700', border: 'none', fontSize: '14px', cursor: 'pointer'}}
           >
             MASTERCLASS ACCOMMODATION<br/>~ Book Now
+          </button>
+
+          <button
+            onClick={handleMullaBaseStore}
+            style={{backgroundColor: '#dc2626', color: 'white', padding: '14px 8px', borderRadius: '8px', fontWeight: '700', border: 'none', fontSize: '14px', cursor: 'pointer'}}
+          >
+            MULLABASE STORE<br/>~ Shop Now
           </button>
 
           <button
@@ -384,4 +406,4 @@ export default function Home() {
       </footer>
     </div>
   )
-  }
+         }
