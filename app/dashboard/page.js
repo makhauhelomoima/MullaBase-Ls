@@ -141,4 +141,39 @@ export default function Dashboard() {
         <div style={{backgroundColor: 'white', padding: '20px', borderRadius: '16px', border: '2px solid #fed7aa', marginBottom: '16px'}}>
           <div style={{backgroundColor: '#f0fdf4', padding: '16px', borderRadius: '10px', border: '1px solid #bbf7d0'}}>
             <div style={{fontSize: '12px', color: '#15803d', fontWeight: '700', marginBottom: '4px'}}>MULLA BALANCE</div>
-            <div style={{fontSize: '32px', fontWeight: '900', color: '#15803d'}}>{userData
+            <div style={{fontSize: '32px', fontWeight: '900', color: '#15803d'}}>{userData.points || 0} points</div>
+            <div style={{fontSize: '13px', color: '#16a34a', marginTop: '4px'}}>
+              = {currency}{Math.floor((userData.points || 0) / 10)}
+            </div>
+          </div>
+        </div>
+
+        <div style={{backgroundColor: 'white', padding: '20px', borderRadius: '16px', border: '2px solid #fed7aa', marginBottom: '16px'}}>
+          <div style={{fontSize: '16px', color: '#7c2d12', fontWeight: '800', marginBottom: '12px'}}>Referral HQ</div>
+          <div style={{display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '16px'}}>
+            <div style={{backgroundColor: '#ffedd5', padding: '12px', borderRadius: '8px', textAlign: 'center'}}>
+              <div style={{fontSize: '24px', fontWeight: '900', color: '#c2410c'}}>{referrals.length}</div>
+              <div style={{fontSize: '12px', color: '#9a3412', fontWeight: '600'}}>Friends Joined</div>
+            </div>
+            <div style={{backgroundColor: '#ffedd5', padding: '12px', borderRadius: '8px', textAlign: 'center'}}>
+              <div style={{fontSize: '24px', fontWeight: '900', color: '#c2410c'}}>{referrals.length * 10}</div>
+              <div style={{fontSize: '12px', color: '#9a3412', fontWeight: '600'}}>Points Earned</div>
+            </div>
+          </div>
+          <div style={{fontSize: '12px', color: '#c2410c', fontWeight: '700', marginBottom: '8px'}}>YOUR LINK</div>
+          <div style={{fontSize: '13px', color: '#7c2d12', marginBottom: '12px', wordBreak: 'break-all', backgroundColor: '#ffedd5', padding: '8px', borderRadius: '6px'}}>
+            {referralLink}
+          </div>
+          <button
+            onClick={copyReferralLink}
+            style={{width: '100%', backgroundColor: copied? '#16a34a' : '#ea580c', color: 'white', padding: '12px', borderRadius: '8px', fontWeight: '700', border: 'none', fontSize: '14px', cursor: 'pointer'}}
+          >
+            {copied? 'Copied!' : 'Copy Link - 10pts per friend'}
+          </button>
+        </div>
+
+        <div style={{backgroundColor: 'white', padding: '20px', borderRadius: '16px', border: '2px solid #fed7aa', marginBottom: '16px'}}>
+          <div style={{fontSize: '16px', color: '#7c2d12', fontWeight: '800', marginBottom: '8px'}}>
+            MullaBase Agent
+          </div>
+          <div style={{fontSize: '13px', color: '#9a3412', marginBottom: '12px', lineHeight: '1.5
