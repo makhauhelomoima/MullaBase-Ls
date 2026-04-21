@@ -61,24 +61,17 @@ export default function Home() {
 
   useEffect(() => {
     checkUser()
-    const { data: authListener } = 
-      supabase.auth.onAuthStateChange(() => {
-        checkUser()
-      })
-    return () => 
-      authListener?.subscription?.unsubscribe()
+    const { data: authListener } = supabase.auth.onAuthStateChange(() => {
+      checkUser()
+    })
+    return () => authListener?.subscription?.unsubscribe()
   }, [])
 
   const checkUser = async () => {
-    const { data: { user } } = 
-      await supabase.auth.getUser()
+    const { data: { user } } = await supabase.auth.getUser()
     setUser(user)
     if (user) {
-      const { data } = await supabase
-        .from('leads')
-        .select('points')
-        .eq('email', user.email)
-        .single()
+      const { data } = await supabase.from('leads').select('points').eq('email', user.email).single()
       setPoints(data?.points || 0)
     }
     setLoading(false)
@@ -87,50 +80,12 @@ export default function Home() {
   const handleJoin = async () => {
     if (!email) return
     setJoinLoading(true)
-    const ref = new URLSearchParams(
-      window.location.search
-    ).get('ref')
-    const { data: existing } = await supabase
-      .from('leads')
-      .select('id')
-      .eq('email', email)
-      .single()
+    const ref = new URLSearchParams(window.location.search).get('ref')
+    const { data: existing } = await supabase.from('leads').select('id').eq('email', email).single()
     if (existing) {
-      const { error } = await supabase.auth
-        .signInWithOtp({ email })
+      const { error } = await supabase.auth.signInWithOtp({ email })
       if (!error) alert('Check your email!')
     } else {
-      const { error } = await supabase.auth
-        .signInWithOtp({ email })
+      const { error } = await supabase.auth.signInWithOtp({ email })
       if (!error) {
-        await supabase.from('leads').insert({
-          email,
-          points: 20,
-          referred_by: ref || null
-        })
-        alert('Check email! 20 points FREE!')
-        if (ref) {
-          await supabase.rpc('increment', {
-            row_id: ref,
-            table_name: 'leads',
-            column_name: 'points',
-            x: 10
-          })
-        }
-      }
-    }
-    setJoinLoading(false)
-    setShowJoin(false)
-  }
-
-  const addPoints = async (amount, action) => {
-    if (!user) return setShowJoin(true)
-    const newPoints = points + amount
-    setPoints(newPoints)
-    await supabase.from('leads')
-      .update({ points: newPoints })
-      .eq('email', user.email)
-    alert(`+${amount} points! ${action}`)
-  }
-
-  const handleCashOut
+        await supabase.from('leads').insert({ email, points: 20, referred_by: ref ||
