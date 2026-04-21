@@ -1,12 +1,16 @@
 export const metadata = {
-  title: 'MullaBase - Africa\'s Rewards Platform',
-  description: 'MullaBase: Free rewards platform for Africa. Vote on content, shop partner stores, earn M-Pesa, airtime & data. Live in Lesotho, SA & Botswana. No country blocks.',
-}
-
-export default function RootLayout({ children }) {
-  return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
-  )
+  title: 'MullaBase - Instant Marketplace | Spend & Earn',
+  description: 'Instant Marketplace | Spend & Earn. Sell on MullaBase & earn. Join 2000+ Africans earning M10/R10/P10.',
+  openGraph: {
+    title: 'MullaBase - Instant Marketplace | Spend & Earn',
+    description: 'Instant Marketplace | Spend & Earn. Sell on MullaBase & earn.',
+    url: 'https://mulla-base-ls.vercel.app',
+    siteName: 'MullaBase',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'MullaBase - Instant Marketplace | Spend & Earn',
+    description: 'Instant Marketplace | Spend & Earn',
+  },
   }
