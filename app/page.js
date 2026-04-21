@@ -158,4 +158,116 @@ export default function Home() {
       setShowJoinForm(true)
       return
     }
-    const message = `Hi! I found MullaBase Store on MullaBase. I want to see what you sell.
+    const message = `Hi! I found MullaBase Store on MullaBase. I want to see what you sell. My email: ${userData.email}. MullaBase ID: ${userData.id}`
+    window.open(`https://wa.me/26657031600?text=${encodeURIComponent(message)}`, '_blank')
+  }
+
+  const addPoints = async (amount, reason) => {
+    if(!userData) {
+      alert('Join MullaBase first')
+      setShowJoinForm(true)
+      return
+    }
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/leads?email=eq.${userData.email}`, {
+        method: 'PATCH',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          points: (userData.points || 0) + amount
+        })
+      })
+      if(res.ok) {
+        setUserData({...userData, points: (userData.points || 0) + amount})
+        alert(`+${amount} points! ${reason}`)
+      }
+    } catch {
+      alert('Error. Try again.')
+    }
+  }
+
+  const copyReferralLink = () => {
+    if(!userData) {
+      setShowJoinForm(true)
+      return
+    }
+    const link = `https://mulla-base-ls.vercel.app?ref=${userData.referral_code || userData.email.split('@')[0]}`
+    navigator.clipboard.writeText(link)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  const currency = userData? PAYOUTS[userData.country_code || 'LS'].currency : PAYOUTS[country].currency
+  const referralLink = userData? `https://mulla-base-ls.vercel.app?ref=${userData.referral_code || userData.email.split('@')[0]}` : ''
+
+  return (
+    <div style={{backgroundColor: '#fffbeb', minHeight: '100vh', fontFamily: 'system-ui, -apple-system, sans-serif'}}>
+      <header style={{padding: '18px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', maxWidth: '1152px', margin: '0 auto'}}>
+        <div style={{color: '#9a3412', fontWeight: '800', fontSize: '22px'}}>
+          Mulla<span style={{color: '#ea580c'}}>Base</span>
+        </div>
+        <div style={{fontSize: '12px', backgroundColor: '#ffedd5', color: '#c2410c', padding: '6px 14px', borderRadius: '8px', fontWeight: '700', border: '1px solid #fed7aa'}}>
+          Born in Lesotho. Open to Africa
+        </div>
+      </header>
+
+      <section style={{padding: '40px 24px', maxWidth: '600px', margin: '0 auto', textAlign: 'center'}}>
+        <h1 style={{fontSize: '36px', fontWeight: '900', color: '#7c2d12', marginBottom: '8px'}}>
+          MullaBase
+        </h1>
+        <div style={{fontSize: '16px', color: '#9a3412', marginBottom: '4px'}}>
+          Instant Marketplace | Spend & Earn
+        </div>
+        <div style={{fontSize: '15px', color: '#c2410c', fontWeight: '600', marginBottom: '32px'}}>
+          Join & get 20 points FREE!
+        </div>
+
+        <div style={{display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '24px'}}>
+          <button
+            onClick={() => setShowJoinForm(true)}
+            style={{backgroundColor: '#f97316', color: 'white', padding: '14px 8px', borderRadius: '8px', fontWeight: '700', border: 'none', fontSize: '14px', cursor: 'pointer'}}
+          >
+            Join & get 20 points FREE! 🎁
+          </button>
+
+          <button
+            onClick={handleMasterclassBooking}
+            style={{backgroundColor: '#ea580c', color: 'white', padding: '14px 8px', borderRadius: '8px', fontWeight: '700', border: 'none', fontSize: '14px', cursor: 'pointer'}}
+          >
+            MASTERCLASS ACCOMMODATION<br/>~ Book Now
+          </button>
+
+          <button
+            onClick={handleMullaBaseStore}
+            style={{backgroundColor: '#dc2626', color: 'white', padding: '14px 8px', borderRadius: '8px', fontWeight: '700', border: 'none', fontSize: '14px', cursor: 'pointer'}}
+          >
+            MULLABASE STORE<br/>~ Shop Now
+          </button>
+
+          <button
+            onClick={() => window.location.href = '/store'}
+            style={{backgroundColor: '#ea580c', color: 'white', padding: '14px 8px', borderRadius: '8px', fontWeight: '700', border: 'none', fontSize: '14px', cursor: 'pointer'}}
+          >
+            Templates
+          </button>
+
+          <button
+            onClick={() => addPoints(5, 'Backend check-in')}
+            style={{backgroundColor: '#ea580c', color: 'white', padding: '14px 8px', borderRadius: '8px', fontWeight: '700', border: 'none', fontSize: '14px', cursor: 'pointer'}}
+          >
+            Backend
+          </button>
+
+          <button
+            onClick={() => window.location.href = '/store?filter=airtime'}
+            style={{backgroundColor: '#0f172a', color: 'white', padding: '14px 8px', borderRadius: '8px', fontWeight: '700', border: 'none', fontSize: '14px', cursor: 'pointer'}}
+          >
+            Airtime
+          </button>
+
+          <button
+            onClick={() => addPoints(10, 'SIM Registration interest logged')}
+            style={{backgroundColor: '#16a34a', color: 'white', padding: '14px 8px', borderRadius: '8px', fontWeight: '700', border: 'none', fontSize: '14px', cursor:
