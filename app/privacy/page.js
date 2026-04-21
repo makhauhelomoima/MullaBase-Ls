@@ -1,10 +1,21 @@
+'use client'
+export const dynamic = 'force-dynamic'
+import Link from 'next/link'
+
 export default function Privacy() {
   return (
-    <div style={{padding: '40px 24px', maxWidth: '600px', margin: '0 auto', backgroundColor: '#fffbeb', minHeight: '100vh'}}>
-      <h1 style={{color: '#7c2d12', fontSize: '28px', fontWeight: '900'}}>Privacy Policy</h1>
-      <p style={{color: '#9a3412', marginTop: '16px', lineHeight: '1.6'}}>MullaBase collects your email and phone to run the rewards program. We never sell data. WhatsApp: +26657031600 to delete your account. We comply with POPIA.</p>
-      <p style={{color: '#9a3412', marginTop: '16px'}}>Points are promotional, not currency. Cashouts via M-Pesa/EFT within 24hrs.</p>
-      <a href="/" style={{color: '#ea580c', fontWeight: '700'}}>← Back to MullaBase</a>
+    <div style={{backgroundColor: '#fffbeb', minHeight: '100vh', padding: '40px 24px', fontFamily: 'system-ui, -apple-system, sans-serif'}}>
+      <div style={{maxWidth: '800px', margin: '0 auto'}}>
+        <Link href="/" style={{color: '#c2410c', fontWeight: '700', fontSize: '14px', textDecoration: 'none', marginBottom: '24px', display: 'inline-block'}}>
+          ← Back to MullaBase
+        </Link>
+        <h1 style={{fontSize: '32px', fontWeight: '900', color: '#7c2d12', marginBottom: '24px'}}>Privacy Policy</h1>
+        <div style={{backgroundColor: 'white', padding: '24px', borderRadius: '16px', border: '2px solid #fed7aa', lineHeight: '1.7', color: '#7c2d12'}}>
+          <p style={{marginBottom: '16px'}}>MullaBase collects your email and referral data to run the points and cashout system.</p>
+          <p style={{marginBottom: '16px'}}>We never sell your data. Phone numbers are only used for M-Pesa/EcoCash payouts.</p>
+          <p>Contact: support@mullabase.co.ls</p>
+        </div>
+      </div>
     </div>
   )
-    }
+}
