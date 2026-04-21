@@ -362,19 +362,28 @@ export default function Home() {
             </button>
             <button 
               onClick={() => addPoints(5, 'Backend')} 
-              style={{ ...btn, backgroundColor: '#7c3aed' }}
+              style={{ 
+                ...btn, 
+                backgroundColor: '#7c3aed' 
+              }}
             >
               Backend
             </button>
             <button 
               onClick={() => router.push('/store')} 
-              style={{ ...btn, backgroundColor: '#0ea5e9' }}
+              style={{ 
+                ...btn, 
+                backgroundColor: '#0ea5e9' 
+              }}
             >
               Airtime
             </button>
             <button 
               onClick={() => addPoints(10, 'SIM Reg')} 
-              style={{ ...btn, backgroundColor: '#16a34a' }}
+              style={{ 
+                ...btn, 
+                backgroundColor: '#16a34a' 
+              }}
             >
               SIM Registration
             </button>
@@ -416,4 +425,124 @@ export default function Home() {
           </p>
           <button 
             onClick={copyLink} 
-            style={{
+            style={{ 
+              ...btn, 
+              width: '100%', 
+              backgroundColor: copied ? 
+                '#16a34a' : '#ea580c' 
+            }}
+          >
+            {copied ? 'Copied!' : 'Copy Link'}
+          </button>
+        </div>
+
+        <footer style={{ 
+          textAlign: 'center', 
+          marginTop: '32px', 
+          fontSize: '12px', 
+          color: '#9a3412' 
+        }}>
+          <p>© 2025 MullaBase. Born in Lesotho.</p>
+          <div style={{ marginTop: '12px' }}>
+            <a 
+              href="/privacy" 
+              style={{ 
+                color: '#c2410c', 
+                marginRight: '16px' 
+              }}
+            >
+              Privacy
+            </a>
+            <a 
+              href="/terms" 
+              style={{ color: '#c2410c' }}
+            >
+              Terms
+            </a>
+          </div>
+        </footer>
+
+        {showJoin && (
+          <div style={{ 
+            position: 'fixed', 
+            top: 0, 
+            left: 0, 
+            right: 0, 
+            bottom: 0, 
+            backgroundColor: 'rgba(0,0,0,0.5)', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            padding: '16px' 
+          }}>
+            <div style={{ 
+              backgroundColor: 'white', 
+              padding: '24px', 
+              borderRadius: '12px', 
+              width: '100%', 
+              maxWidth: '400px' 
+            }}>
+              <h2 style={{ 
+                fontSize: '20px', 
+                fontWeight: '800', 
+                color: '#7c2d12', 
+                marginBottom: '12px' 
+              }}>
+                Join MullaBase
+              </h2>
+              <p style={{ 
+                fontSize: '14px', 
+                color: '#9a3412', 
+                marginBottom: '16px' 
+              }}>
+                Get 20 points FREE. No password.
+              </p>
+              <input 
+                type="email" 
+                placeholder="your@email.com" 
+                value={email} 
+                onChange={(e) => 
+                  setEmail(e.target.value)
+                } 
+                style={{ 
+                  width: '100%', 
+                  padding: '12px', 
+                  border: '2px solid #f97316', 
+                  borderRadius: '8px', 
+                  marginBottom: '12px', 
+                  fontSize: '16px' 
+                }} 
+              />
+              <button 
+                onClick={handleJoin} 
+                disabled={joinLoading} 
+                style={{ 
+                  ...btn, 
+                  width: '100%', 
+                  marginBottom: '8px' 
+                }}
+              >
+                {joinLoading ? 
+                  'Sending...' : 'Send Magic Link'
+                }
+              </button>
+              <button 
+                onClick={() => setShowJoin(false)} 
+                style={{ 
+                  width: '100%', 
+                  backgroundColor: 'transparent', 
+                  color: '#9a3412', 
+                  padding: '12px', 
+                  border: 'none', 
+                  cursor: 'pointer' 
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+    }
