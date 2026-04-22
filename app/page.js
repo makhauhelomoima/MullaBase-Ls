@@ -2,110 +2,80 @@ import Link from 'next/link'
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-orange-50 to-white">
-      <div className="max-w-2xl mx-auto px-4 py-8">
+    <main className="min-h-screen bg-[#FFF8F0]">
+      <div className="max-w-md mx-auto px-4 py-6 text-center">
         
         {/* Header */}
-        <header className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-black text-orange-900">MullaBase</h1>
-          <Link 
-            href="/join" 
-            className="bg-orange-600 text-white px-5 py-2 rounded-full font-bold text-sm hover:bg-orange-700 transition"
-          >
-            Sign In / Join
-          </Link>
-        </header>
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-black text-orange-700">MullaBase</h1>
+          <div className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-semibold">
+            Born in Lesotho. Open to Africa
+          </div>
+        </div>
 
-        {/* Hero Section */}
-        <section className="bg-white rounded-3xl shadow-xl p-8 mb-8 border border-orange-100">
-          <h2 className="text-5xl font-black text-orange-900 leading-tight">
-            Instant Spend &<br/>Earn Marketplace
-          </h2>
+        {/* Hero */}
+        <h2 className="text-4xl font-black text-orange-900 mb-2">MullaBase</h2>
+        <p className="text-orange-700 text-sm">Instant Marketplace | Spend & Earn</p>
+        <p className="text-orange-700 text-sm font-bold mt-1">Join & get M10 FREE!</p>
+
+        {/* Button Grid - OG Colors */}
+        <div className="grid grid-cols-2 gap-3 mt-6">
+          <Link href="/join" className="bg-orange-500 text-white p-4 rounded-xl font-bold text-sm shadow-md">
+            Join & get M10 FREE! 🎁
+          </Link>
+          <Link href="/masterclass" className="bg-orange-500 text-white p-4 rounded-xl font-bold text-sm shadow-md">
+            MASTERCLASS ACCOMMODATION<br/>~ Book Now
+          </Link>
           
-          <div className="bg-orange-600 text-white rounded-2xl p-4 mt-6 text-center">
-            <p className="text-lg font-semibold">NEW USERS GET</p>
-            <p className="text-4xl font-black">M10 FREE</p>
-            <p className="text-sm opacity-90">= 100 Points to Spend Instantly</p>
-          </div>
-
-          <p className="text-orange-800 mt-6 text-lg">
-            Buy airtime, data, templates. Sell products. Refer friends.
-          </p>
-
-          <div className="grid grid-cols-2 gap-3 mt-6">
-            <Link href="/join" className="bg-orange-900 text-white text-center py-4 rounded-xl font-bold hover:bg-black transition">
-              Claim M10 Free
-            </Link>
-            <Link href="/store" className="bg-orange-100 text-orange-900 text-center py-4 rounded-xl font-bold hover:bg-orange-200 transition">
-              Browse Store
-            </Link>
-          </div>
-        </section>
-
-        {/* Color Tabs - How It Works */}
-        <section className="mb-8">
-          <h3 className="text-2xl font-black text-orange-900 mb-4">How MullaBase Pays You:</h3>
+          <Link href="/store" className="bg-red-600 text-white p-4 rounded-xl font-bold text-sm shadow-md">
+            MULLABASE STORE<br/>~ Shop Now
+          </Link>
+          <Link href="/store?cat=templates" className="bg-orange-500 text-white p-4 rounded-xl font-bold text-sm shadow-md">
+            Templates
+          </Link>
           
-          <div className="space-y-3">
-            {/* For Buyers Tab */}
-            <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-xl">
-              <p className="font-black text-green-900">FOR BUYERS</p>
-              <p className="text-green-800 text-sm mt-1">
-                Sign up → <span className="font-bold">Get M10 FREE</span> → Spend on airtime, data, digital products
-              </p>
-            </div>
+          <Link href="/admin" className="bg-orange-500 text-white p-4 rounded-xl font-bold text-sm shadow-md">
+            Backend
+          </Link>
+          <Link href="/store?cat=airtime" className="bg-gray-900 text-white p-4 rounded-xl font-bold text-sm shadow-md">
+            Airtime
+          </Link>
+          
+          <Link href="/sim" className="bg-green-600 text-white p-4 rounded-xl font-bold text-sm shadow-md">
+            SIM Registration
+          </Link>
+          <Link href="/sell" className="bg-gray-900 text-white p-4 rounded-xl font-bold text-sm shadow-md col-span-2">
+            Sell - Open Your Shop
+          </Link>
+        </div>
 
-            {/* For Sellers Tab */}
-            <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-xl">
-              <p className="font-black text-blue-900">FOR SELLERS</p>
-              <p className="text-blue-800 text-sm mt-1">
-                Pay <span className="font-bold">M20 to advertise</span> → Keep <span className="font-bold">100% of sales</span> → No commission ever
-              </p>
-            </div>
+        {/* Footer Text */}
+        <div className="mt-8 text-orange-700 text-xs space-y-1">
+          <p>Sell on MullaBase & earn | Share = M1 per friend</p>
+          <p>100 points = M10/R10/P10 | Withdraw to cash or airtime</p>
+        </div>
 
-            {/* For Referrers Tab */}
-            <div className="bg-purple-50 border-l-4 border-purple-500 p-4 rounded-r-xl">
-              <p className="font-black text-purple-900">FOR REFERRERS</p>
-              <p className="text-purple-800 text-sm mt-1">
-                Invite friends → <span className="font-bold">Earn M1 each</span> = 10 points → Cash out to Mobile Money
-              </p>
-            </div>
-          </div>
-        </section>
+        {/* Big CTA Button */}
+        <Link href="/store">
+          <button className="mt-6 w-full bg-orange-500 text-white py-4 rounded-xl font-black text-lg shadow-lg">
+            Enter MullaBase Store →
+          </button>
+        </Link>
 
-        {/* Points Value */}
-        <section className="bg-orange-100 rounded-2xl p-6 mb-8">
-          <p className="text-center text-orange-900 font-bold">
-            100 Points = M10 = R10 = P10
+        {/* M20 Seller Note */}
+        <div className="mt-8 bg-blue-50 border-l-4 border-blue-500 p-3 rounded-r-xl text-left">
+          <p className="font-black text-blue-900 text-sm">FOR SELLERS</p>
+          <p className="text-blue-800 text-xs mt-1">
+            Pay <span className="font-bold">M20 to advertise</span> → Keep <span className="font-bold">100% of sales</span> → No commission
           </p>
-          <p className="text-center text-orange-700 text-sm mt-1">
-            Cash out to Ecocash, M-Pesa, Airtime anytime
-          </p>
-        </section>
+        </div>
 
-        {/* Quick Links */}
-        <section className="grid grid-cols-2 gap-3 mb-8 text-sm">
-          <Link href="/join" className="bg-white border border-orange-200 p-3 rounded-xl text-center font-semibold text-orange-900 hover:bg-orange-50">
-            Claim 20 Free Points
-          </Link>
-          <Link href="/store" className="bg-white border border-orange-200 p-3 rounded-xl text-center font-semibold text-orange-900 hover:bg-orange-50">
-            Shop Digital Products
-          </Link>
-          <Link href="/join" className="bg-white border border-orange-200 p-3 rounded-xl text-center font-semibold text-orange-900 hover:bg-orange-50">
-            Start Selling - M20
-          </Link>
-          <Link href="/store" className="bg-white border border-orange-200 p-3 rounded-xl text-center font-semibold text-orange-900 hover:bg-orange-50">
-            Buy Airtime
-          </Link>
-        </section>
-
-        {/* Footer */}
-        <footer className="text-center py-6 border-t border-orange-100">
-          <p className="font-bold text-orange-900">Lesotho's Pride. Africa's Treasure!</p>
-          <p className="text-xs text-orange-600 mt-2">© 2026 MullaBase | Built for Africa</p>
+        <footer className="text-center py-6 mt-8">
+          <p className="font-bold text-orange-900 text-sm">Lesotho's Pride. Africa's Treasure!</p>
+          <p className="text-xs text-orange-600 mt-1">© 2026 MullaBase</p>
         </footer>
 
       </div>
     </main>
   )
-    }
+          }
