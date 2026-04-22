@@ -1,190 +1,135 @@
 'use client'
-import { useState, useEffect } from 'react'
-import { supabase } from '@/lib/supabase'
-import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import Link from 'next/link'
 
-export default function SellPage() {
-  const [user, setUser] = useState(null)
+export default function Sell() {
   const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [category, setCategory] = useState('Digital - Instant')
-  const [stock, setStock] = useState('999')
-  const [fulfillment, setFulfillment] = useState('')
-  const [mulPrice, setMulPrice] = useState('')
-  const [usdPrice, setUsdPrice] = useState('')
-  const [file, setFile] = useState(null)
-  const [isMullaBase, setIsMullaBase] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const router = useRouter()
+  const [type, setType] = useState('Digital - Instant')
+  const [price, setPrice] = useState('')
 
-  // CHANGE THIS: Get your ID from Supabase → Authentication → Users → Copy your UUID
-  const MULLABASE_USER_ID = '591aaf66-c5f5-4704-83ce-4d1049b413b5'
-
-  useEffect(() => {
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) router.push('/login')
-      setUser(user)
-    }
-    getUser()
-  }, [router])
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-
-    let fileUrl = null
-    if (category === 'Digital - Instant' && fulfillment.includes('drive') && file) {
-      const fileExt = file.name.split('.').pop()
-      const fileName = `${user.id}-${Date.now()}.${fileExt}`
-      const { error: uploadError } = await supabase.storage
-       .from('products')
-       .upload(fileName, file)
-
-      if (uploadError) {
-        alert('File upload failed: ' + uploadError.message)
-        setLoading(false)
-        return
-      }
-
-      const { data: { publicUrl } } = supabase.storage
-       .from('products')
-       .getPublicUrl(fileName)
-      fileUrl = publicUrl
-    }
-
-    const { error } = await supabase.from('products').insert({
-      title,
-      description,
-      category,
-      stock: parseInt(stock),
-      price: isMullaBase? parseFloat(usdPrice) : parseFloat(mulPrice),
-      fulfillment: fileUrl || fulfillment,
-      file_url: fileUrl,
-      seller_id: user.id,
-      is_mullabase_official: isMullaBase && user.id === MULLABASE_USER_ID
-    })
-
-    setLoading(false)
-    if (error) {
-      alert('Error: ' + error.message)
-    } else {
-      alert('Product listed successfully!')
-      router.push('/store')
-    }
+  const inputStyle = {
+    width: '100%',
+    padding: '14px',
+    borderRadius: '12px',
+    border: '2px solid #FED7AA',
+    fontSize: '16px',
+    marginBottom: '16px',
+    backgroundColor: 'white'
   }
 
-  if (!user) return <div className="p-8">Loading...</div>
+  const labelStyle = {
+    display: 'block',
+    fontWeight: '700',
+    color: '#7C2D12',
+    fontSize: '14px',
+    marginBottom: '6px',
+    textAlign: 'left'
+  }
 
   return (
-    <div className="p-8 max-w-2xl mx-auto">
-      <Link href="/" className="text-blue-600 mb-4 block">← Home</Link>
-      <h1 className="text-2xl font-bold mb-6">Sell on MullaBase</h1>
-      
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input 
-          type="text" 
-          placeholder="Product Title" 
-          value={title} 
-          onChange={(e) => setTitle(e.target.value)}
-          className="w-full p-2 border rounded"
-          required 
-        />
+    <main style={{minHeight: '100vh', backgroundColor: '#FFF8F0', padding: '24px'}}>
+      <div style={{maxWidth: '400px', margin: '0 auto'}}>
         
-        <textarea 
-          placeholder="Description" 
-          value={description} 
-          onChange={(e) => setDescription(e.target.value)}
-          className="w-full p-2 border rounded h-24"
-          required 
-        />
+        {/* Header */}
+        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px'}}>
+          <Link href="/" style={{fontSize: '14px', fontWeight: '700', color: '#C2410C', textDecoration: 'none'}}>
+            ← Home
+          </Link>
+          <h1 style={{fontSize: '24px', fontWeight: '900', color: '#C2410C'}}>MullaBase</h1>
+        </div>
 
-        <select 
-          value={category} 
-          onChange={(e) => setCategory(e.target.value)}
-          className="w-full p-2 border rounded"
-        >
-          <option>Digital - Instant</option>
-          <option>Digital - Manual</option>
-          <option>Physical - Delivery</option>
-          <option>Physical - Pickup</option>
-        </select>
+        {/* Title */}
+        <h2 style={{fontSize: '32px', fontWeight: '900', color: '#7C2D12', textAlign: 'center', marginBottom: '8px'}}>
+          Sell on MullaBase
+        </h2>
+        <p style={{color: '#C2410C', fontSize: '14px', textAlign: 'center', marginBottom: '24px'}}>
+          List your product and keep 100% of sales
+        </p>
 
-        <input 
-          type="number" 
-          placeholder="Stock" 
-          value={stock} 
-          onChange={(e) => setStock(e.target.value)}
-          className="w-full p-2 border rounded"
-          required 
-        />
+        {/* M20 Fee Notice */}
+        <div style={{backgroundColor: '#DBEAFE', borderLeft: '4px solid #3B82F6', padding: '12px', borderRadius: '0 12px 12px 0', marginBottom: '24px'}}>
+          <p style={{fontWeight: '900', color: '#1E3A8A', fontSize: '14px', margin: 0}}>LISTING FEE: M20</p>
+          <p style={{color: '#1E40AF', fontSize: '12px', margin: '4px 0 0 0'}}>
+            Pay once to advertise → Keep 100% of every sale forever
+          </p>
+        </div>
 
-        {category === 'Digital - Instant'? (
-          <div>
-            <label className="block text-sm mb-1">Upload PDF File</label>
-            <input 
-              type="file" 
-              accept=".pdf"
-              onChange={(e) => setFile(e.target.files[0])}
-              className="w-full p-2 border rounded"
-              required 
-            />
-          </div>
-        ) : (
+        {/* Form */}
+        <div style={{backgroundColor: 'white', padding: '24px', borderRadius: '20px', boxShadow: '0 4px 20px rgba(0,0,0,0.08)'}}>
+          
+          <label style={labelStyle}>Product Title</label>
           <input 
-            type="text" 
-            placeholder="Fulfillment Instructions or Drive Link" 
-            value={fulfillment} 
-            onChange={(e) => setFulfillment(e.target.value)}
-            className="w-full p-2 border rounded"
-            required 
+            style={inputStyle}
+            placeholder="Money Cake Tutorial"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
           />
-        )}
 
-        {user.id === MULLABASE_USER_ID && (
-          <div className="p-3 bg-green-50 border border-green-200 rounded">
-            <label className="flex items-center space-x-2">
-              <input 
-                type="checkbox" 
-                checked={isMullaBase} 
-                onChange={(e) => setIsMullaBase(e.target.checked)}
-              />
-              <span className="font-bold text-green-700">MullaBase Official - List in USD $</span>
-            </label>
-          </div>
-        )}
+          <label style={labelStyle}>Product Type</label>
+          <select 
+            style={inputStyle}
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+          >
+            <option>Digital - Instant</option>
+            <option>Physical Product</option>
+            <option>Service</option>
+            <option>Airtime/Data</option>
+          </select>
 
-        {isMullaBase && user.id === MULLABASE_USER_ID? (
+          <label style={labelStyle}>Price in Points</label>
           <input 
-            type="number" 
-            step="0.01"
-            placeholder="Price in USD $" 
-            value={usdPrice} 
-            onChange={(e) => setUsdPrice(e.target.value)}
-            className="w-full p-2 border rounded"
-            required 
+            style={inputStyle}
+            placeholder="999 = M9.99"
+            type="number"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
           />
-        ) : (
-          <input 
-            type="number" 
-            step="0.01"
-            placeholder="Price in MUL" 
-            value={mulPrice} 
-            onChange={(e) => setMulPrice(e.target.value)}
-            className="w-full p-2 border rounded"
-            required 
-          />
-        )}
+          <p style={{fontSize: '12px', color: '#C2410C', marginTop: '-12px', marginBottom: '16px', textAlign: 'left'}}>
+            100 points = M10 | 999 points = M9.99
+          </p>
 
-        <button 
-          type="submit" 
-          disabled={loading}
-          className="w-full bg-blue-600 text-white p-3 rounded font-bold disabled:bg-gray-400"
-        >
-          {loading? 'Listing...' : 'List Product'}
-        </button>
-      </form>
-    </div>
+          <label style={labelStyle}>Upload PDF File</label>
+          <input 
+            style={{...inputStyle, padding: '10px', fontSize: '14px'}}
+            type="file"
+            accept=".pdf"
+          />
+
+          {/* M20 Pay Button */}
+          <button style={{
+            width: '100%',
+            backgroundColor: '#3B82F6',
+            color: 'white',
+            padding: '16px',
+            borderRadius: '12px',
+            fontWeight: '900',
+            fontSize: '18px',
+            border: 'none',
+            marginTop: '8px',
+            boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+          }}>
+            Pay M20 & List Product →
+          </button>
+
+          <p style={{fontSize: '11px', color: '#9A3412', textAlign: 'center', marginTop: '12px'}}>
+            You'll be redirected to pay M20. Product goes live after payment.
+          </p>
+        </div>
+
+        {/* Example */}
+        <div style={{marginTop: '24px', backgroundColor: '#FEF3C7', padding: '12px', borderRadius: '12px'}}>
+          <p style={{fontSize: '12px', color: '#92400E', fontWeight: '700', margin: 0}}>
+            Example: List "Red Velvet Recipe" for 999 points = M9.99<br/>
+            You pay M20 once → Keep all M9.99 from every sale
+          </p>
+        </div>
+
+        <footer style={{textAlign: 'center', padding: '24px 0', marginTop: '32px'}}>
+          <p style={{fontWeight: 'bold', color: '#7C2D12', fontSize: '14px'}}>Lesotho's Pride. Africa's Treasure!</p>
+        </footer>
+
+      </div>
+    </main>
   )
     }
