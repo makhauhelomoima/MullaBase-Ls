@@ -1,94 +1,52 @@
 'use client'
-export const dynamic = 'force-dynamic'
 import { useState } from 'react'
+import { createClient } from '@supabase/supabase-js'
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
-const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+)
 
 export default function Home() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState('')
+  const [msg, setMsg] = useState('')
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+  const handleJoin = async () => {
     setLoading(true)
-    setMessage('')
+    const { error } = await supabase.auth.signUp({ email, password })
+    if (error) setMsg(error.message)
+    else window.location.href = '/dashboard'
+    setLoading(false)
+  }
 
-    try {
-      const res = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': SUPABASE_KEY
-        },
-        body: JSON.stringify({ email, password })
-      })
-
-      const data = await res.json()
-
-      if (!res.ok) {
-        setMessage(data.msg || 'Try again in a moment.')
-        setLoading(false)
-        return
-      }
-
-      const userId = data.user?.id
-      if (userId) {
-        await fetch(`${SUPABASE_URL}/rest/v1/users`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`,
-            'Prefer': 'return=minimal'
-          },
-          body: JSON.stringify({
-            id: userId,
-            email: email,
-            points: 1000,
-            is_admin: false
-          })
-        })
-      }
-
-      window.location.href = '/dashboard'
-    } catch (err) {
-      setMessage('Network error. Try again.')
-      setLoading(false)
-    }
+  const handleLogin = async () => {
+    setLoading(true)
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) setMsg(error.message)
+    else window.location.href = '/dashboard'
+    setLoading(false)
   }
 
   return (
-    <div style={{ padding: 40, fontFamily: 'system-ui', maxWidth: 400, margin: '0 auto' }}>
-      <h1>Join MullaBase</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          style={{ display: 'block', width: '100%', padding: 10, margin: '10px 0' }}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          style={{ display: 'block', width: '100%', padding: 10, margin: '10px 0' }}
-        />
-        <button
-          type="submit"
-          disabled={loading}
-          style={{ width: '100%', padding: 12, background: '#000', color: '#fff', border: 'none', cursor: 'pointer' }}
-        >
-          {loading? 'Creating Base...' : 'Join MullaBase'}
-        </button>
-      </form>
-      {message && <p style={{ color: 'red', marginTop: 10 }}>{message}</p>}
-    </div>
+    <main className="min-h-screen bg-white text-black">
+      <div className="border-b border-black p-2 flex justify-between text-sm">
+        <span>Welcome To</span>
+        <button onClick={handleLogin} className="border border-black px-3 py-1">SIGN IN USER</button>
+      </div>
+      <div className="border-b border-black p-4">
+        <h1 className="text-6xl">MullaBase</h1>
+        <h2 className="text-xl mt-2">Instant Spend & Earn Marketplace.</h2>
+      </div>
+      <div className="border-b border-black p-2 text-center font-bold">SIM REGISTRATION</div>
+      <div className="p-4 max-w-sm mx-auto space-y-2">
+        <input type="email" placeholder="Email" value={email} onChange={e=>setEmail(e.target.value)} className="w-full border border-black p-2"/>
+        <input type="password" placeholder="Password" value={password} onChange={e=>setPassword(e.target.value)} className="w-full border border-black p-2"/>
+        <button onClick={handleJoin} disabled={loading} className="w-full bg-black text-white p-2">Join MullaBase</button>
+        {msg && <p className="text-xs text-center">{msg}</p>}
+      </div>
+      <div className="p-2 text-xs">Born in Lesotho, Open to Africa</div>
+    </main>
   )
-          }
+}
