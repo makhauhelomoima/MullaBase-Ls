@@ -1,81 +1,86 @@
 import Link from 'next/link'
 
 export default function Home() {
+  const btnStyle = {
+    padding: '16px',
+    borderRadius: '12px',
+    fontWeight: 'bold',
+    fontSize: '14px',
+    color: 'white',
+    textDecoration: 'none',
+    display: 'block',
+    boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+  }
+
   return (
-    <main className="min-h-screen bg-[#FFF8F0]">
-      <div className="max-w-md mx-auto px-4 py-6 text-center">
+    <main style={{minHeight: '100vh', backgroundColor: '#FFF8F0', padding: '24px'}}>
+      <div style={{maxWidth: '400px', margin: '0 auto', textAlign: 'center'}}>
         
-        {/* Header */}
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-black text-orange-700">MullaBase</h1>
-          <div className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-semibold">
+        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px'}}>
+          <h1 style={{fontSize: '24px', fontWeight: '900', color: '#C2410C'}}>MullaBase</h1>
+          <div style={{backgroundColor: '#FFEDD5', color: '#C2410C', padding: '4px 12px', borderRadius: '9999px', fontSize: '12px', fontWeight: '600'}}>
             Born in Lesotho. Open to Africa
           </div>
         </div>
 
-        {/* Hero */}
-        <h2 className="text-4xl font-black text-orange-900 mb-2">MullaBase</h2>
-        <p className="text-orange-700 text-sm">Instant Marketplace | Spend & Earn</p>
-        <p className="text-orange-700 text-sm font-bold mt-1">Join & get 20 points FREE!</p>
+        <h2 style={{fontSize: '36px', fontWeight: '900', color: '#7C2D12', marginBottom: '8px'}}>MullaBase</h2>
+        <p style={{color: '#C2410C', fontSize: '14px'}}>Instant Marketplace | Spend & Earn</p>
+        <p style={{color: '#C2410C', fontSize: '14px', fontWeight: 'bold', marginTop: '4px'}}>Join & get 20 points FREE!</p>
 
-        {/* Button Grid - OG Colors */}
-        <div className="grid grid-cols-2 gap-3 mt-6">
-          <Link href="/join" className="bg-orange-500 text-white p-4 rounded-xl font-bold text-sm shadow-md">
+        <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '24px'}}>
+          <Link href="/join" style={{...btnStyle, backgroundColor: '#F97316'}}>
             Join & get 20 points FREE! 🎁
           </Link>
-          <Link href="/masterclass" className="bg-orange-500 text-white p-4 rounded-xl font-bold text-sm shadow-md">
+          <Link href="/masterclass" style={{...btnStyle, backgroundColor: '#F97316'}}>
             MASTERCLASS ACCOMMODATION<br/>~ Book Now
           </Link>
           
-          <Link href="/store" className="bg-red-600 text-white p-4 rounded-xl font-bold text-sm shadow-md">
+          <Link href="/store" style={{...btnStyle, backgroundColor: '#DC2626'}}>
             MULLABASE STORE<br/>~ Shop Now
           </Link>
-          <Link href="/store?cat=templates" className="bg-orange-500 text-white p-4 rounded-xl font-bold text-sm shadow-md">
+          <Link href="/store?cat=templates" style={{...btnStyle, backgroundColor: '#F97316'}}>
             Templates
           </Link>
           
-          <Link href="/admin" className="bg-orange-500 text-white p-4 rounded-xl font-bold text-sm shadow-md">
+          <Link href="/admin" style={{...btnStyle, backgroundColor: '#F97316'}}>
             Backend
           </Link>
-          <Link href="/store?cat=airtime" className="bg-gray-900 text-white p-4 rounded-xl font-bold text-sm shadow-md">
+          <Link href="/store?cat=airtime" style={{...btnStyle, backgroundColor: '#111827'}}>
             Airtime
           </Link>
           
-          <Link href="/sim" className="bg-green-600 text-white p-4 rounded-xl font-bold text-sm shadow-md">
+          <Link href="/sim" style={{...btnStyle, backgroundColor: '#16A34A'}}>
             SIM Registration
           </Link>
-          <Link href="/sell" className="bg-gray-900 text-white p-4 rounded-xl font-bold text-sm shadow-md col-span-2">
+          <Link href="/sell" style={{...btnStyle, backgroundColor: '#111827', gridColumn: 'span 2'}}>
             Sell - Open Your Shop
           </Link>
         </div>
 
-        {/* Footer Text */}
-        <div className="mt-8 text-orange-700 text-xs space-y-1">
+        <div style={{marginTop: '32px', color: '#C2410C', fontSize: '12px'}}>
           <p>Sell on MullaBase & earn | Share = 10 points per friend</p>
           <p>100 points = M10/R10/P10 | Withdraw to cash or airtime</p>
         </div>
 
-        {/* Big CTA Button */}
         <Link href="/store">
-          <button className="mt-6 w-full bg-orange-500 text-white py-4 rounded-xl font-black text-lg shadow-lg">
+          <button style={{marginTop: '24px', width: '100%', backgroundColor: '#F97316', color: 'white', padding: '16px', borderRadius: '12px', fontWeight: '900', fontSize: '18px', border: 'none', boxShadow: '0 10px 15px rgba(0,0,0,0.1)'}}>
             Enter MullaBase Store →
           </button>
         </Link>
 
-        {/* M20 Seller Note */}
-        <div className="mt-8 bg-blue-50 border-l-4 border-blue-500 p-3 rounded-r-xl text-left">
-          <p className="font-black text-blue-900 text-sm">FOR SELLERS</p>
-          <p className="text-blue-800 text-xs mt-1">
-            Pay <span className="font-bold">M20 to advertise</span> → Keep <span className="font-bold">100% of sales</span> → No commission
+        <div style={{marginTop: '32px', backgroundColor: '#EFF6FF', borderLeft: '4px solid #3B82F6', padding: '12px', borderRadius: '0 12px 12px 0', textAlign: 'left'}}>
+          <p style={{fontWeight: '900', color: '#1E3A8A', fontSize: '14px'}}>FOR SELLERS</p>
+          <p style={{color: '#1E40AF', fontSize: '12px', marginTop: '4px'}}>
+            Pay <span style={{fontWeight: 'bold'}}>M20 to advertise</span> → Keep <span style={{fontWeight: 'bold'}}>100% of sales</span> → No commission
           </p>
         </div>
 
-        <footer className="text-center py-6 mt-8">
-          <p className="font-bold text-orange-900 text-sm">Lesotho's Pride. Africa's Treasure!</p>
-          <p className="text-xs text-orange-600 mt-1">© 2026 MullaBase</p>
+        <footer style={{textAlign: 'center', padding: '24px 0', marginTop: '32px'}}>
+          <p style={{fontWeight: 'bold', color: '#7C2D12', fontSize: '14px'}}>Lesotho's Pride. Africa's Treasure!</p>
+          <p style={{fontSize: '12px', color: '#C2410C', marginTop: '4px'}}>© 2026 MullaBase</p>
         </footer>
 
       </div>
     </main>
   )
-          }
+  }
