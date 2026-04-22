@@ -32,6 +32,7 @@ export default function Store() {
      .from('seller_products')
      .select('*')
      .eq('status', 'active')
+     .gt('stock', 0)
      .order('created_at', { ascending: false })
     if (productData) setProducts(productData)
 
@@ -79,6 +80,11 @@ export default function Store() {
      .from('profiles')
      .update({ seller_balance: (sellerProfile?.seller_balance || 0) + sellerEarnings })
      .eq('id', product.seller_id)
+
+    await supabase
+     .from('seller_products')
+     .update({ stock: product.stock - 1 })
+     .eq('id', product.id)
 
     const { error: purchaseError } = await supabase
      .from('purchases')
@@ -148,6 +154,7 @@ export default function Store() {
                   <div className="font-bold text-[#1E293B]">{product.name}</div>
                   <div className="text-xs text-gray-600">{product.description}</div>
                   <div className="text-xs text-gray-400 mt-1">Sold by: {product.seller_email}</div>
+                  <div className="text-xs text-gray-400">Stock: {product.stock}</div>
                 </div>
                 <div className="text-right">
                   <div className="text-xl font-bold text-[#EA580C]">{product.cost_points}</div>
@@ -157,11 +164,12 @@ export default function Store() {
               
               <button
                 onClick={() => buyProduct(product)}
-                disabled={loading || points < product.cost_points || product.seller_id === user.id}
+                disabled={loading || points < product.cost_points || product.seller_id === user.id || product.stock === 0}
                 className="w-full bg-[#DC2626] text-white p-2 rounded-lg font-bold text-sm disabled:bg-gray-400 hover:bg-red-700 mt-2"
               >
                 {loading ? 'Processing...' : 
                  product.seller_id === user.id ? 'Your listing' :
+                 product.stock === 0 ? 'Sold Out' :
                  points < product.cost_points ? 'Not enough points' : 
                  `Buy for ${product.cost_points} pts`}
               </button>
@@ -192,4 +200,4 @@ export default function Store() {
       </div>
     </main>
   )
-}
+    }
