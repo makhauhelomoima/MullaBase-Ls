@@ -23,21 +23,40 @@ export default function Withdraw() {
   }, [])
 
   async function loadData(userId) {
-    // Get points from profiles table - you’ll create this later
-    // For now hardcode 20 for testing
-    setPoints(20)
-    
-    const { data } = await supabase.from('withdrawals')
-      .select('*').eq('user_id', userId).order('created_at', { ascending: false })
-    if (data) setHistory(data)
+    // Get real points from profiles table
+    const { data: profile } = await supabase
+     .from('profiles')
+     .select('points')
+     .eq('id', userId)
+     .single()
+
+    setPoints(profile?.points || 0)
+
+    // Get withdrawal history
+    const { data: withdrawData } = await supabase
+     .from('withdrawals')
+     .select('*')
+     .eq('user_id', userId)
+     .order('created_at', { ascending: false })
+
+    if (withdrawData) setHistory(withdrawData)
   }
 
-  const cashValue = (amount / 100) * 10 // 100 points = 10
-  const canWithdraw = amount >= 100 && amount <= points && phone.length >= 8
+  const cashValue = (amount / 100) * 10 // 100 points = M10
+  const canWithdraw = amount >= 100 && amount <= points && amount % 100 === 0 && phone.length >= 8
 
   async function handleWithdraw() {
-    if (!canWithdraw) return setMsg('Min 100 points. Check phone number.')
+    if (!canWithdraw) {
+      if (amount < 100) return setMsg('Minimum 100 points')
+      if (amount > points) return setMsg('Not enough points')
+      if (amount % 100!== 0) return setMsg('Use multiples of 100: 100, 200, 300...')
+      if (phone.length < 8) return setMsg('Enter valid phone number')
+      return
+    }
+
     setLoading(true)
+    setMsg('')
+
     const { error } = await supabase.from('withdrawals').insert({
       user_id: user.id,
       email: user.email,
@@ -48,9 +67,11 @@ export default function Withdraw() {
       phone: phone,
       status: 'pending'
     })
-    if (error) setMsg(error.message)
-    else {
-      setMsg('Withdrawal requested! We’ll pay in 24 hours.')
+
+    if (error) {
+      setMsg(error.message)
+    } else {
+      setMsg('Withdrawal requested! We’ll pay within 24 hours.')
       setAmount(100)
       setPhone('')
       loadData(user.id)
@@ -58,15 +79,23 @@ export default function Withdraw() {
     setLoading(false)
   }
 
-  if (!user) return <div className="p-6 text-center">Loading...</div>
+  if (!user) return (
+    <div className="min-h-screen bg-[#FFF9F0] flex items-center justify-center">
+      <div className="text-[#0066FF] font-bold">Loading...</div>
+    </div>
+  )
 
   return (
     <main className="min-h-screen bg-[#FFF9F0] text-black">
       <div className="max-w-md mx-auto p-4">
-        <a href="/dashboard" className="text-[#0066FF] text-sm">← Back</a>
-        <h1 className="text-3xl font-bold text-[#0066FF] my-4">Withdraw Cash</h1>
-        
-        <div className="bg-white rounded-xl shadow p-5 mb-4">
+        <div className="flex justify-between items-center mb-4">
+          <a href="/" className="text-[#0066FF] text-sm font-bold">← Home</a>
+          <div className="text-xs text-gray-600">{user.email}</div>
+        </div>
+
+        <h1 className="text-3xl font-bold text-[#0066FF] mb-4">Withdraw Cash</h1>
+
+        <div className="bg-white rounded-xl shadow-lg p-5 mb-4 border border-gray-200">
           <div className="text-center mb-4">
             <div className="text-sm text-gray-600">Your Balance</div>
             <div className="text-4xl font-bold text-[#00C851]">{points} pts</div>
@@ -76,20 +105,26 @@ export default function Withdraw() {
           <div className="space-y-3">
             <div>
               <label className="text-xs font-bold">Points to Withdraw</label>
-              <input 
-                type="number" 
-                value={amount} 
+              <input
+                type="number"
+                value={amount}
                 onChange={e=>setAmount(Number(e.target.value))}
                 min="100"
                 step="100"
-                className="w-full border-2 border-gray-300 p-3 rounded-lg"
+                className="w-full border-2 border-gray-300 p-3 rounded-lg focus:border-[#00C851] focus:outline-none"
               />
-              <div className="text-xs text-[#EA580C]">You’ll receive: M{cashValue.toFixed(2)}</div>
+              <div className="text-xs text-[#EA580C] mt-1">
+                You’ll receive: M{cashValue.toFixed(2)}
+              </div>
             </div>
 
             <div>
               <label className="text-xs font-bold">Payment Method</label>
-              <select value={method} onChange={e=>setMethod(e.target.value)} className="w-full border-2 border-gray-300 p-3 rounded-lg">
+              <select
+                value={method}
+                onChange={e=>setMethod(e.target.value)}
+                className="w-full border-2 border-gray-300 p-3 rounded-lg focus:border-[#00C851] focus:outline-none"
+              >
                 <option value="mpesa">M-Pesa</option>
                 <option value="airtime">Airtime</option>
                 <option value="bank">Bank Transfer</option>
@@ -98,38 +133,65 @@ export default function Withdraw() {
 
             <div>
               <label className="text-xs font-bold">Phone / Account Number</label>
-              <input 
-                placeholder="58xxxxxx" 
-                value={phone} 
+              <input
+                placeholder="58xxxxxx"
+                value={phone}
                 onChange={e=>setPhone(e.target.value)}
-                className="w-full border-2 border-gray-300 p-3 rounded-lg"
+                className="w-full border-2 border-gray-300 p-3 rounded-lg focus:border-[#00C851] focus:outline-none"
               />
             </div>
 
-            <button 
-              onClick={handleWithdraw} 
+            <button
+              onClick={handleWithdraw}
               disabled={!canWithdraw || loading}
-              className="w-full bg-[#00C851] text-white p-3 rounded-lg font-bold disabled:bg-gray-400"
+              className="w-full bg-[#00C851] text-white p-3 rounded-lg font-bold disabled:bg-gray-400 hover:bg-green-700"
             >
-              {loading ? 'Processing...' : `Withdraw M${cashValue.toFixed(2)}`}
+              {loading? 'Processing...' : `Withdraw M${cashValue.toFixed(2)}`}
             </button>
-            {msg && <p className="text-xs text-center text-red-600 font-bold">{msg}</p>}
-            <p className="text-xs text-center text-gray-500">Min: 100 points. Processed in 24hrs.</p>
+
+            {msg && <p className={`text-xs text-center font-bold ${msg.includes('requested')? 'text-[#00C851]' : 'text-red-600'}`}>{msg}</p>}
+
+            <div className="text-xs text-center text-gray-500 space-y-1">
+              <p>Min: 100 points | 100 pts = M10</p>
+              <p>Processed within 24 hours</p>
+            </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow p-5">
-          <h2 className="font-bold mb-3">History</h2>
-          {history.length === 0 ? <p className="text-xs text-gray-500">No withdrawals yet</p> : 
-            history.map(w => (
-              <div key={w.id} className="border-b py-2 text-xs flex justify-between">
-                <span>M{w.amount_cash} via {w.method}</span>
-                <span className={`font-bold ${w.status === 'pending' ? 'text-[#EA580C]' : 'text-[#00C851]'}`}>{w.status}</span>
-              </div>
-            ))
-          }
+        <div className="bg-white rounded-xl shadow-lg p-5 border border-gray-200">
+          <h2 className="font-bold mb-3 text-[#1E293B]">Withdrawal History</h2>
+          {history.length === 0? (
+            <p className="text-xs text-gray-500 text-center py-4">No withdrawals yet</p>
+          ) : (
+            <div className="space-y-2">
+              {history.map(w => (
+                <div key={w.id} className="border-b border-gray-100 pb-2 text-xs">
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold">M{w.amount_cash} via {w.method}</span>
+                    <span className={`font-bold px-2 py-1 rounded ${
+                      w.status === 'pending'? 'bg-[#EA580C] text-white' :
+                      w.status === 'paid'? 'bg-[#00C851] text-white' :
+                      'bg-red-600 text-white'
+                    }`}>
+                      {w.status}
+                    </span>
+                  </div>
+                  <div className="text-gray-500 mt-1">
+                    {w.amount_points} pts to {w.phone}
+                  </div>
+                  <div className="text-gray-400 text-[10px]">
+                    {new Date(w.created_at).toLocaleDateString()}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="p-3 text-xs text-center text-gray-500 mt-4">
+          <a href="/privacy" className="underline">Privacy</a> | <a href="/terms" className="underline">Terms</a>
         </div>
       </div>
     </main>
   )
-  }
+         }
