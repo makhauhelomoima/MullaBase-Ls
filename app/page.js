@@ -97,4 +97,59 @@ export default function Home() {
         </div>
 
         <div className="px-6 py-2 text-center text-xs text-[#92400E] bg-[#FFF9F0]">
-          <p>Sell on MullaBase & earn
+          <p>Sell on MullaBase & earn | Share = 10 points per friend</p>
+          <p>100 points = M10/R10/P10 | Withdraw to cash or airtime</p>
+        </div>
+
+        {!showJoinForm ? (
+          <div className="p-4 bg-[#FFF9F0]">
+            <div className="bg-white rounded-xl shadow-lg p-5 border border-gray-200">
+              <h3 className="text-center font-bold text-[#EA580C] mb-4">JOIN 2,000+ AFRICANS EARNING</h3>
+              <div className="space-y-3">
+                <select value={joinData.location} onChange={e=>setJoinData({...joinData, location:e.target.value})} className="w-full border-2 border-gray-300 p-3 rounded-lg focus:border-[#EA580C] focus:outline-none">
+                  <option>Lesotho</option>
+                  <option>South Africa</option>
+                  <option>Botswana</option>
+                  <option>eSwatini</option>
+                </select>
+                <input type="email" placeholder="mulla.test@gmail.com" value={loginEmail} onChange={e=>setLoginEmail(e.target.value)} className="w-full border-2 border-gray-300 p-3 rounded-lg focus:border-[#EA580C] focus:outline-none"/>
+                <input type="password" placeholder="Password" value={loginPassword} onChange={e=>setLoginPassword(e.target.value)} className="w-full border-2 border-gray-300 p-3 rounded-lg focus:border-[#EA580C] focus:outline-none"/>
+                <button onClick={()=>setShowJoinForm(true)} className="w-full bg-[#EA580C] text-white p-3 rounded-lg hover:bg-orange-700 font-bold">
+                  Claim Your Base + M2 Free
+                </button>
+                {msg && <p className="text-xs text-center text-red-600 font-bold">{msg}</p>}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="p-4 bg-[#FFF9F0]">
+            <div className="bg-white rounded-xl shadow-lg p-5 border border-gray-200">
+              <h3 className="text-center font-bold text-[#00C851] mb-4">CREATE ACCOUNT - GET 20 FREE POINTS</h3>
+              <div className="space-y-3">
+                <input placeholder="Name" value={joinData.name} onChange={e=>setJoinData({...joinData, name:e.target.value})} className="w-full border-2 border-gray-300 p-3 rounded-lg focus:border-[#00C851]"/>
+                <input type="email" placeholder="Email address" value={joinData.email} onChange={e=>setJoinData({...joinData, email:e.target.value})} className="w-full border-2 border-gray-300 p-3 rounded-lg focus:border-[#00C851]"/>
+                <input type="password" placeholder="Password" value={joinData.password} onChange={e=>setJoinData({...joinData, password:e.target.value})} className="w-full border-2 border-gray-300 p-3 rounded-lg focus:border-[#00C851]"/>
+                <input placeholder="Phone: 58xxxxxx" value={joinData.phone} onChange={e=>setJoinData({...joinData, phone:e.target.value})} className="w-full border-2 border-gray-300 p-3 rounded-lg focus:border-[#00C851]"/>
+                <button onClick={handleJoin} disabled={loading} className="w-full bg-[#00C851] text-white p-3 rounded-lg hover:bg-green-700 disabled:bg-gray-400 font-bold">{loading ? 'Creating...' : 'SUBMIT & CLAIM 20 POINTS'}</button>
+                <button onClick={()=>setShowJoinForm(false)} className="w-full border-2 border-gray-300 p-3 rounded-lg hover:bg-gray-100">Back</button>
+                {msg && <p className="text-xs text-center text-red-600 font-bold">{msg}</p>}
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="p-4 bg-[#FFF9F0]">
+          <a href="/store" className="block w-full bg-[#EA580C] text-white p-4 rounded-lg text-center font-bold shadow hover:bg-orange-700">
+            Enter MullaBase Store →
+          </a>
+        </div>
+
+        <div className="p-3 text-xs flex justify-between bg-white border-t border-gray-200">
+          <span><a href="/privacy" className="underline">Privacy</a> | <a href="/terms" className="underline">Terms</a> | <a href="/contact" className="underline">Contact Support</a></span>
+          <span className="text-[#0066FF] font-bold">Born in Lesotho | Open to Africa</span>
+        </div>
+
+      </div>
+    </main>
+  )
+    }
