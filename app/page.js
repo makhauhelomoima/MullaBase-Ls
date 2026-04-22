@@ -81,3 +81,36 @@ export default function Home() {
             </a>
             <a href="/backend" className="bg-[#EA580C] text-white p-4 rounded-lg text-center font-bold shadow hover:bg-orange-700 flex items-center justify-center">
               Backend
+            </a>
+            <a href="/airtime" className="bg-[#1E293B] text-white p-4 rounded-lg text-center font-bold shadow hover:bg-slate-800 flex items-center justify-center">
+              Airtime
+            </a>
+          </div>
+          
+          <a href="/sim-register" className="block bg-[#00C851] text-white p-4 rounded-lg text-center font-bold shadow hover:bg-green-700">
+            SIM Registration - EARN 20 POINTS
+          </a>
+          
+          <a href="/seller" className="block bg-[#1E293B] text-white p-4 rounded-lg text-center font-bold shadow hover:bg-slate-800">
+            Sell - Open Your Shop
+          </a>
+        </div>
+
+        <div className="px-6 py-2 text-center text-xs text-[#92400E] bg-[#FFF9F0]">
+          <p>Sell on MullaBase & earn | Share = 10 points per friend</p>
+          <p>100 points = M10/R10/P10 | Withdraw to cash or airtime</p>
+        </div>
+
+        {!showJoinForm ? (
+          <div className="p-4 bg-[#FFF9F0]">
+            <div className="bg-white rounded-xl shadow-lg p-5 border border-gray-200">
+              <h3 className="text-center font-bold text-[#EA580C] mb-4">JOIN 2,000+ AFRICANS EARNING</h3>
+              <div className="space-y-3">
+                <select value={joinData.location} onChange={e=>setJoinData({...joinData, location:e.target.value})} className="w-full border-2 border-gray-300 p-3 rounded-lg focus:border-[#EA580C] focus:outline-none">
+                  <option>Lesotho</option>
+                  <option>South Africa</option>
+                  <option>Botswana</option>
+                  <option>eSwatini</option>
+                </select>
+                <input type="email" placeholder="mulla.test@gmail.com" value={loginEmail} onChange={e=>setLoginEmail(e.target.value)} className="w-full border-2 border-gray-300 p-3 rounded-lg focus:border-[#EA580C] focus:outline-none"/>
+                <input type="password" placeholder="Password" value={
