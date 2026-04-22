@@ -19,6 +19,8 @@ export default function Seller() {
     init()
   }, [])
 
+  const buyBoost = () => alert('Boost purchased! Expires in 24h. Backend wire-up next.')
+
   if (loading) return <div className="p-4">Loading Seller HQ...</div>
 
   return (
@@ -38,9 +40,9 @@ export default function Seller() {
         <div className="col-span-2 border border-black p-3">
           <div className="font-bold mb-1">PROMOTE YOUR BUSINESS FOR 1 DAY REACH @ M20</div>
           <div className="text-xs">*All Businesses promoted appear on Wellness Hub for 1 Day Only then refresh with new promotions</div>
-          <button className="w-full bg-black text-white mt-2 p-1">BUY 1-DAY BOOST M20</button>
+          <button onClick={buyBoost} className="w-full bg-black text-white mt-2 p-1">BUY 1-DAY BOOST M20</button>
         </div>
       </div>
     </main>
   )
-    }
+}
