@@ -29,25 +29,24 @@ export default function Home() {
         <p style={{color: '#C2410C', fontSize: '14px'}}>Instant Marketplace | Spend & Earn</p>
         <p style={{color: '#C2410C', fontSize: '14px', fontWeight: 'bold', marginTop: '4px'}}>Join & get 20 points FREE!</p>
 
-        {/* Button Grid - Trimmed */}
+        {/* Button Grid - Balanced */}
         <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '24px'}}>
           
-          {/* Join Button - Now Full Width + Bigger */}
+          {/* Join Button - Full Width */}
           <Link href="/join" style={{...btnStyle, backgroundColor: '#F97316', gridColumn: 'span 2', padding: '20px', fontSize: '16px'}}>
             Join & get 20 points FREE! 🎁<br/>
             <span style={{fontSize: '12px', opacity: '0.9'}}>Claim M2 to spend now</span>
           </Link>
           
-          <Link href="/admin" style={{...btnStyle, backgroundColor: '#F97316'}}>
-            Backend
-          </Link>
+          {/* Airtime + SIM - Balanced */}
           <Link href="/store?cat=airtime" style={{...btnStyle, backgroundColor: '#111827'}}>
             Airtime
           </Link>
-          
           <Link href="/sim" style={{...btnStyle, backgroundColor: '#16A34A'}}>
             SIM Registration
           </Link>
+          
+          {/* Sell - Full Width */}
           <Link href="/sell" style={{...btnStyle, backgroundColor: '#111827', gridColumn: 'span 2'}}>
             Sell - Open Your Shop
           </Link>
