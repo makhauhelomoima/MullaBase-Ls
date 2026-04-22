@@ -1,211 +1,84 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { createClient } from '@supabase/supabase-js'
-
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
+import { supabase } from '@/lib/supabase'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export default function Home() {
   const [user, setUser] = useState(null)
-  const [points, setPoints] = useState(0)
   const [loading, setLoading] = useState(true)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [authMsg, setAuthMsg] = useState('')
+  const router = useRouter()
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      if (data.user) {
-        setUser(data.user)
-        loadPoints(data.user.id)
-      }
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      setUser(user)
       setLoading(false)
-    })
+    }
+    getUser()
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user) {
-        setUser(session.user)
-        loadPoints(session.user.id)
-      } else {
-        setUser(null)
-        setPoints(0)
-      }
+      setUser(session?.user ?? null)
     })
+
     return () => subscription.unsubscribe()
   }, [])
 
-  async function loadPoints(userId) {
-    const { data } = await supabase
-     .from('profiles')
-     .select('points')
-     .eq('id', userId)
-     .single()
-    setPoints(data?.points || 0)
-  }
-
-  async function signUp() {
-    if (!email || !password) return setAuthMsg('Enter email and password')
-    setAuthMsg('Creating account...')
-    const { error } = await supabase.auth.signUp({ email, password })
-    if (error) setAuthMsg('Error: ' + error.message)
-    else setAuthMsg('Check your email to confirm')
-  }
-
-  async function signIn() {
-    if (!email || !password) return setAuthMsg('Enter email and password')
-    setAuthMsg('Signing in...')
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) setAuthMsg('Error: ' + error.message)
-    else setAuthMsg('')
-  }
-
-  async function signOut() {
+  const handleLogout = async () => {
     await supabase.auth.signOut()
-    setUser(null)
+    router.refresh()
   }
 
-  if (loading) return (
-    <div className="min-h-screen bg-[#FFF9F0] flex items-center justify-center">
-      <div className="text-[#0066FF] font-bold">Loading MullaBase...</div>
-    </div>
-  )
+  if (loading) return <div className="p-8">Loading MullaBase...</div>
 
   return (
-    <main className="min-h-screen bg-[#FFF9F0] text-black">
-      <div className="max-w-md mx-auto p-4">
-        
-        {/* Header */}
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h1 className="text-4xl font-bold text-[#0066FF]">MullaBase</h1>
-            <p className="text-xs text-gray-600">Earn. Trade. Cash out.</p>
-          </div>
-          {user && (
-            <div className="text-right">
-              <div className="text-xs text-gray-600">{user.email}</div>
-              <div className="text-lg font-bold text-[#00C851]">{points} pts</div>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-4xl mx-auto p-8">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold text-blue-600">MullaBase</h1>
+          {user? (
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-gray-600">{user.email}</span>
+              <button 
+                onClick={handleLogout}
+                className="text-sm bg-gray-200 px-3 py-1 rounded"
+              >
+                Logout
+              </button>
             </div>
+          ) : (
+            <Link href="/login" className="bg-blue-600 text-white px-4 py-2 rounded">
+              Login
+            </Link>
           )}
         </div>
 
-        {!user ? (
-          /* Auth Form */
-          <div className="bg-white rounded-xl shadow-lg p-5 border border-gray-200 mb-6">
-            <h2 className="font-bold mb-3 text-[#1E293B] text-center">Join MullaBase</h2>
-            
-            {authMsg && (
-              <div className={`p-2 rounded mb-3 text-sm text-center font-bold ${
-                authMsg.includes('Error') ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-[#0066FF]'
-              }`}>
-                {authMsg}
-              </div>
-            )}
-            
-            <div className="space-y-3">
-              <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-3 rounded border border-gray-300 text-sm"
-              />
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-3 rounded border border-gray-300 text-sm"
-              />
-              <button
-                onClick={signIn}
-                className="w-full bg-[#0066FF] text-white p-3 rounded-lg font-bold"
-              >
-                Sign In
-              </button>
-              <button
-                onClick={signUp}
-                className="w-full bg-[#00C851] text-white p-3 rounded-lg font-bold"
-              >
-                Create Account
-              </button>
-            </div>
-          </div>
-        ) : (
-          <>
-            {/* Economy Buttons - THE CORE LOOP */}
-            <div className="grid grid-cols-2 gap-3 mb-6">
-              <a href="/earn" className="bg-[#0066FF] text-white p-4 rounded-xl font-bold text-center shadow-lg hover:bg-blue-700">
-                <div className="text-2xl mb-1">🎁</div>
-                <div className="text-sm">Earn</div>
-                <div className="text-xs opacity-80">Daily + Offers</div>
-              </a>
-              
-              <a href="/store" className="bg-[#DC2626] text-white p-4 rounded-xl font-bold text-center shadow-lg hover:bg-red-700">
-                <div className="text-2xl mb-1">🛒</div>
-                <div className="text-sm">Store</div>
-                <div className="text-xs opacity-80">Buy from sellers</div>
-              </a>
-              
-              <a href="/sell" className="bg-[#EA580C] text-white p-4 rounded-xl font-bold text-center shadow-lg hover:bg-orange-700">
-                <div className="text-2xl mb-1">💰</div>
-                <div className="text-sm">Sell</div>
-                <div className="text-xs opacity-80">Earn 90%</div>
-              </a>
-              
-              <a href="/withdraw" className="bg-[#00C851] text-white p-4 rounded-xl font-bold text-center shadow-lg hover:bg-green-700">
-                <div className="text-2xl mb-1">💸</div>
-                <div className="text-sm">Withdraw</div>
-                <div className="text-xs opacity-80">Cash out</div>
-              </a>
-            </div>
-
-            {/* Stats Card */}
-            <div className="bg-white rounded-xl shadow-lg p-5 border border-gray-200 mb-4">
-              <h2 className="font-bold mb-3 text-[#1E293B]">Your Balance</h2>
-              <div className="text-center py-4">
-                <div className="text-5xl font-bold text-[#00C851] mb-2">{points}</div>
-                <div className="text-sm text-gray-600">Points Available</div>
-                <div className="text-xs text-gray-500 mt-1">100 pts = M10</div>
-              </div>
-            </div>
-
-            {/* How It Works */}
-            <div className="bg-white rounded-xl shadow-lg p-5 border border-gray-200 mb-4">
-              <h2 className="font-bold mb-3 text-[#1E293B]">How MullaBase Works</h2>
-              <div className="space-y-3 text-sm">
-                <div className="flex gap-3">
-                  <div className="text-[#0066FF] font-bold">1.</div>
-                  <div><span className="font-bold">Earn:</span> Claim daily rewards, complete offers, refer friends</div>
-                </div>
-                <div className="flex gap-3">
-                  <div className="text-[#DC2626] font-bold">2.</div>
-                  <div><span className="font-bold">Spend:</span> Buy airtime, data, products in the Store</div>
-                </div>
-                <div className="flex gap-3">
-                  <div className="text-[#EA580C] font-bold">3.</div>
-                  <div><span className="font-bold">Sell:</span> List your own products, earn 90% per sale</div>
-                </div>
-                <div className="flex gap-3">
-                  <div className="text-[#00C851] font-bold">4.</div>
-                  <div><span className="font-bold">Cash Out:</span> Withdraw earnings via EFT or Mpesa</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Sign Out */}
-            <button
-              onClick={signOut}
-              className="w-full bg-gray-200 text-gray-700 p-2 rounded-lg text-sm font-bold"
+        <div className="bg-white p-8 rounded-lg shadow text-center">
+          <h2 className="text-2xl font-bold mb-4">Buy & Sell Digital Products</h2>
+          <p className="text-gray-600 mb-6">Lesotho's marketplace for PDFs, templates, and more.</p>
+          
+          <div className="flex gap-4 justify-center">
+            <Link 
+              href="/store" 
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold"
             >
-              Sign Out
-            </button>
-          </>
-        )}
-
-        {/* Footer */}
-        <div className="text-center mt-8 text-xs text-gray-500">
-          MullaBase © 2026 • Exodus 14:14
+              Browse Store
+            </Link>
+            <Link 
+              href="/sell" 
+              className="bg-green-600 text-white px-6 py-3 rounded-lg font-bold"
+            >
+              Start Selling
+            </Link>
+          </div>
         </div>
+
+        {user && (
+          <div className="mt-8 text-center text-sm text-gray-500">
+            Welcome back, {user.email}
+          </div>
+        )}
       </div>
-    </main>
+    </div>
   )
-                    }
+    }
