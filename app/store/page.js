@@ -1,68 +1,78 @@
-import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
-import { Resend } from 'resend'
+'use client'
+import { useState, useEffect } from 'react'
+import { supabase } from '@/lib/supabase'
+import Link from 'next/link'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY // use service role for writes
-)
+export default function StorePage() {
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .order('created_at', { ascending: false })
+      
+      if (error) console.error('Store error:', error)
+      else setProducts(data || [])
+      setLoading(false)
+    }
+    fetchProducts()
+  }, [])
 
-export async function POST(req) {
-  const { product_id, buyer_id } = await req.json()
+  if (loading) return <div className="p-8 text-center">Loading MullaBase Store...</div>
 
-  // 1. Get product + seller
-  const { data: product } = await supabase
-    .from('products')
-    .select('*, profiles:seller_id(email)')
-    .eq('id', product_id)
-    .single()
+  return (
+    <div className="min-h-screen bg-[#FFF8F0] flex flex-col">
+      {/* Header */}
+      <div className="flex justify-between items-center p-4 bg-white shadow-sm">
+        <Link href="/" className="text-2xl font-bold text-[#B45309]">MullaBase</Link>
+        <Link href="/sell" className="bg-[#B45309] text-white px-4 py-2 rounded text-sm font-bold">
+          + Sell Item
+        </Link>
+      </div>
 
-  if (!product) return NextResponse.json({ error: 'Product not found' }, { status: 404 })
+      {/* Products */}
+      <div className="flex-1 p-4">
+        <h1 className="text-2xl font-bold text-[#1E293B] mb-4">MullaBase Store</h1>
+        
+        {products.length === 0 ? (
+          <div className="text-center py-16 text-gray-500">
+            <p className="text-lg mb-2">No products yet</p>
+            <p className="text-sm mb-4">Be the first to sell on MullaBase</p>
+            <Link href="/sell" className="bg-[#B45309] text-white px-6 py-3 rounded font-bold">
+              List Your First Product
+            </Link>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {products.map((product) => (
+              <div key={product.id} className="bg-white rounded-lg shadow p-3">
+                {product.image_url && (
+                  <img 
+                    src={product.image_url} 
+                    alt={product.name}
+                    className="w-full h-32 object-cover rounded mb-2"
+                  />
+                )}
+                <h3 className="font-bold text-sm text-[#1E293B] truncate">{product.name}</h3>
+                <p className="text-[#B45309] font-bold">
+                  {product.currency === 'USD' ? '$' : 'M'}{product.price}
+                </p>
+                <span className="text-xs bg-gray-100 px-2 py-1 rounded mt-1 inline-block">
+                  {product.category}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
-  // 2. Get buyer
-  const { data: buyer } = await supabase
-    .from('profiles')
-    .select('id, email, points')
-    .eq('id', buyer_id)
-    .single()
-
-  // 3. Check points
-  if (buyer.points < product.price) {
-    return NextResponse.json({ error: 'Insufficient points' }, { status: 400 })
-  }
-
-  // 4. Deduct buyer, credit seller 90%
-  const sellerCut = Math.floor(product.price * 0.9)
-  
-  await supabase.from('profiles').update({ points: buyer.points - product.price }).eq('id', buyer_id)
-  await supabase.rpc('increment_points', { user_id: product.seller_id, amount: sellerCut })
-
-  // 5. Record purchase
-  await supabase.from('purchases').insert({
-    product_id,
-    buyer_id,
-    seller_id: product.seller_id,
-    price_paid: product.price
-  })
-
-  // 6. Auto-email if enabled
-  if (product.auto_deliver && product.fulfillment) {
-    await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL,
-      to: buyer.email,
-      subject: `Your ${product.title} is ready 📦`,
-      html: `
-        <h2>Thanks for your purchase!</h2>
-        <p>Here’s your download link for <b>${product.title}</b>:</p>
-        <a href="${product.fulfillment}">Download PDF</a>
-        <p>This link will work forever. Save it.</p>
-        <br>
-        <p>- MullaBase</p>
-      `
-    })
-  }
-
-  return NextResponse.json({ success: true, delivered: product.auto_deliver })
+      {/* Footer */}
+      <div className="text-center p-4 text-sm text-[#B45309] italic bg-white">
+        *Lesotho's pride. Africa's Treasure!*
+      </div>
+    </div>
+  )
     }
