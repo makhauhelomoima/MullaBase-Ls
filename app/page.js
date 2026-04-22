@@ -16,30 +16,26 @@ export default function Home() {
     <main style={{minHeight: '100vh', backgroundColor: '#FFF8F0', padding: '24px'}}>
       <div style={{maxWidth: '400px', margin: '0 auto', textAlign: 'center'}}>
         
+        {/* Header - Sign In / Create Account */}
         <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px'}}>
           <h1 style={{fontSize: '24px', fontWeight: '900', color: '#C2410C'}}>MullaBase</h1>
-          <div style={{backgroundColor: '#FFEDD5', color: '#C2410C', padding: '4px 12px', borderRadius: '9999px', fontSize: '12px', fontWeight: '600'}}>
-            Born in Lesotho. Open to Africa
-          </div>
+          <Link href="/join" style={{backgroundColor: '#F97316', color: 'white', padding: '8px 16px', borderRadius: '9999px', fontSize: '12px', fontWeight: '700', textDecoration: 'none'}}>
+            Sign In / Create Account
+          </Link>
         </div>
 
+        {/* Hero */}
         <h2 style={{fontSize: '36px', fontWeight: '900', color: '#7C2D12', marginBottom: '8px'}}>MullaBase</h2>
         <p style={{color: '#C2410C', fontSize: '14px'}}>Instant Marketplace | Spend & Earn</p>
         <p style={{color: '#C2410C', fontSize: '14px', fontWeight: 'bold', marginTop: '4px'}}>Join & get 20 points FREE!</p>
 
+        {/* Button Grid - Trimmed */}
         <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '24px'}}>
-          <Link href="/join" style={{...btnStyle, backgroundColor: '#F97316'}}>
-            Join & get 20 points FREE! 🎁
-          </Link>
-          <Link href="/masterclass" style={{...btnStyle, backgroundColor: '#F97316'}}>
-            MASTERCLASS ACCOMMODATION<br/>~ Book Now
-          </Link>
           
-          <Link href="/store" style={{...btnStyle, backgroundColor: '#DC2626'}}>
-            MULLABASE STORE<br/>~ Shop Now
-          </Link>
-          <Link href="/store?cat=templates" style={{...btnStyle, backgroundColor: '#F97316'}}>
-            Templates
+          {/* Join Button - Now Full Width + Bigger */}
+          <Link href="/join" style={{...btnStyle, backgroundColor: '#F97316', gridColumn: 'span 2', padding: '20px', fontSize: '16px'}}>
+            Join & get 20 points FREE! 🎁<br/>
+            <span style={{fontSize: '12px', opacity: '0.9'}}>Claim M2 to spend now</span>
           </Link>
           
           <Link href="/admin" style={{...btnStyle, backgroundColor: '#F97316'}}>
@@ -57,17 +53,20 @@ export default function Home() {
           </Link>
         </div>
 
+        {/* Footer Text */}
         <div style={{marginTop: '32px', color: '#C2410C', fontSize: '12px'}}>
           <p>Sell on MullaBase & earn | Share = 10 points per friend</p>
           <p>100 points = M10/R10/P10 | Withdraw to cash or airtime</p>
         </div>
 
+        {/* Big CTA Button */}
         <Link href="/store">
           <button style={{marginTop: '24px', width: '100%', backgroundColor: '#F97316', color: 'white', padding: '16px', borderRadius: '12px', fontWeight: '900', fontSize: '18px', border: 'none', boxShadow: '0 10px 15px rgba(0,0,0,0.1)'}}>
             Enter MullaBase Store →
           </button>
         </Link>
 
+        {/* M20 Seller Note */}
         <div style={{marginTop: '32px', backgroundColor: '#EFF6FF', borderLeft: '4px solid #3B82F6', padding: '12px', borderRadius: '0 12px 12px 0', textAlign: 'left'}}>
           <p style={{fontWeight: '900', color: '#1E3A8A', fontSize: '14px'}}>FOR SELLERS</p>
           <p style={{color: '#1E40AF', fontSize: '12px', marginTop: '4px'}}>
