@@ -1,67 +1,163 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
+import { useRouter } from 'next/navigation'
 
 export default function SellPage() {
+  const [user, setUser] = useState(null)
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
+  const [mulPrice, setMulPrice] = useState('')
+  const [usdPrice, setUsdPrice] = useState('')
+  const [fulfillment, setFulfillment] = useState('')
+  const [file, setFile] = useState(null)
+  const [isMullaBase, setIsMullaBase] = useState(false)
   const [loading, setLoading] = useState(false)
+  const router = useRouter()
+  
+  // PUT YOUR SUPABASE USER ID HERE
+  const MULLABASE_USER_ID = 'paste-your-user-id-from-supabase-auth'
 
-  async function handleSubmit(e) {
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) router.push('/login')
+      setUser(user)
+    }
+    getUser()
+  }, [router])
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
-    
-    const formData = new FormData(e.target)
-    const { data: { user } } = await supabase.auth.getUser()
-    
-    if (!user) return alert('Login first')
+
+    let fileUrl = null
+    if (file) {
+      const fileExt = file.name.split('.').pop()
+      const fileName = `${user.id}-${Date.now()}.${fileExt}`
+      const { data, error: uploadError } = await supabase.storage
+       .from('products')
+       .upload(fileName, file)
+      
+      if (uploadError) {
+        alert('File upload failed')
+        setLoading(false)
+        return
+      }
+      
+      const { data: { publicUrl } } = supabase.storage
+       .from('products')
+       .getPublicUrl(fileName)
+      fileUrl = publicUrl
+    }
 
     const { error } = await supabase.from('products').insert({
+      title,
+      description,
+      price: isMullaBase? parseFloat(usdPrice) : parseFloat(mulPrice),
+      fulfillment,
+      file_url: fileUrl,
       seller_id: user.id,
-      title: formData.get('title'),
-      price: Number(formData.get('price')),
-      cover_url: formData.get('cover_url'),
-      pdf_url: formData.get('pdf_url'),
-      category: formData.get('category'),
-      currency: formData.get('currency') || 'LSL',
-      fulfillment: formData.get('fulfillment'),
-      auto_deliver: formData.get('auto_deliver') === 'on',
-      is_active: true
+      is_mullabase_official: isMullaBase && user.id === MULLABASE_USER_ID
     })
 
     setLoading(false)
-    if (error) return alert(error.message)
-    alert('Listed! 🔥')
-    e.target.reset()
+    if (error) {
+      alert('Error: ' + error.message)
+    } else {
+      alert('Product listed!')
+      router.push('/store')
+    }
   }
 
+  if (!user) return <div className="p-8">Loading...</div>
+
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 space-y-3">
-      <h1 className="text-2xl font-bold">List Digital Product</h1>
-      
-      <input name="title" placeholder="RED VELVET Tutorial" required className="w-full p-2 rounded bg-black/20 border border-white/10" />
-      <input name="price" type="number" placeholder="500" required className="w-full p-2 rounded bg-black/20 border border-white/10" />
-      <input name="cover_url" type="url" placeholder="Cover image URL" required className="w-full p-2 rounded bg-black/20 border border-white/10" />
-      <input name="pdf_url" type="url" placeholder="PDF preview URL" className="w-full p-2 rounded bg-black/20 border border-white/10" />
-      <input name="category" placeholder="Tutorials" required className="w-full p-2 rounded bg-black/20 border border-white/10" />
-      
-      <div className="border-t border-white/10 pt-3">
-        <label className="block text-sm mb-1">Google Drive PDF Link *</label>
+    <div className="max-w-2xl mx-auto p-8">
+      <h1 className="text-3xl font-bold mb-6">List a Product</h1>
+      <form onSubmit={handleSubmit} className="space-y-4">
         <input 
-          name="fulfillment" 
-          type="url"
-          placeholder="https://drive.google.com/file/d/..." 
-          required
-          className="w-full p-2 rounded bg-black/20 border border-white/10" 
+          type="text" 
+          placeholder="Product Title" 
+          value={title} 
+          onChange={e => setTitle(e.target.value)} 
+          className="w-full p-3 border rounded"
+          required 
         />
-      </div>
+        
+        <textarea 
+          placeholder="Description" 
+          value={description} 
+          onChange={e => setDescription(e.target.value)} 
+          className="w-full p-3 border rounded h-32"
+          required 
+        />
 
-      <div className="flex items-center gap-2">
-        <input name="auto_deliver" type="checkbox" defaultChecked className="rounded" />
-        <label className="text-sm">Auto-email PDF to buyer instantly</label>
-      </div>
+        <select 
+          value={fulfillment} 
+          onChange={e => setFulfillment(e.target.value)}
+          className="w-full p-3 border rounded"
+          required
+        >
+          <option value="">Select Fulfillment Type</option>
+          <option value="download">Instant Download</option>
+          <option value="email">Email Delivery</option>
+          <option value="physical">Physical Shipping</option>
+        </select>
 
-      <button disabled={loading} className="w-full p-3 bg-white text-black rounded font-bold">
-        {loading ? 'Listing...' : 'List Product'}
-      </button>
-    </form>
+        {fulfillment === 'download' || fulfillment === 'email'? (
+          <input 
+            type="file" 
+            onChange={e => setFile(e.target.files[0])}
+            className="w-full p-3 border rounded"
+            required
+          />
+        ) : null}
+
+        {!isMullaBase? (
+          <input 
+            type="number" 
+            placeholder="Price in MUL" 
+            value={mulPrice} 
+            onChange={e => setMulPrice(e.target.value)}
+            className="w-full p-3 border rounded"
+            required 
+          />
+        ) : (
+          <input 
+            type="number" 
+            step="0.01"
+            placeholder="Price in USD" 
+            value={usdPrice} 
+            onChange={e => setUsdPrice(e.target.value)}
+            className="w-full p-3 border rounded"
+            required 
+          />
+        )}
+
+        {user?.id === MULLABASE_USER_ID && (
+          <label className="flex items-center gap-3 p-4 border-2 border-green-500 rounded bg-green-50">
+            <input 
+              type="checkbox" 
+              checked={isMullaBase} 
+              onChange={e => setIsMullaBase(e.target.checked)}
+              className="w-5 h-5"
+            />
+            <div>
+              <div className="font-bold">MullaBase Official Product</div>
+              <div className="text-sm text-gray-600">Sell for USD via Paddle. Money goes to your bank.</div>
+            </div>
+          </label>
+        )}
+
+        <button 
+          type="submit" 
+          disabled={loading}
+          className="w-full bg-black text-white p-4 rounded font-bold disabled:opacity-50"
+        >
+          {loading? 'Listing...' : 'List Product'}
+        </button>
+      </form>
+    </div>
   )
-      }
+         }
