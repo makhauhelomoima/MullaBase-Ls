@@ -1,7 +1,6 @@
 'use client'
 import { useState } from 'react'
 import { createClient } from '@supabase/supabase-js'
-
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
 
 export default function Home() {
@@ -22,19 +21,15 @@ export default function Home() {
 
   const handleJoin = async () => {
     if (!joinData.name ||!joinData.email ||!joinData.password ||!joinData.phone ||!joinData.location) {
-      return setMsg('Fill all fields: Name, Email, Password, Phone, Location')
+      return setMsg('Fill all fields')
     }
     setLoading(true)
     const { error } = await supabase.auth.signUp({ 
-      email: joinData.email, 
-      password: joinData.password,
+      email: joinData.email, password: joinData.password,
       options: { data: { name: joinData.name, phone: joinData.phone, location: joinData.location } }
     })
     if (error) setMsg(error.message)
-    else {
-      setMsg('Account created! You got 20 FREE Points.')
-      setTimeout(() => window.location.href = '/dashboard', 2000)
-    }
+    else { setMsg('Account created! You got 20 FREE Points.'); setTimeout(() => window.location.href = '/dashboard', 2000) }
     setLoading(false)
   }
 
@@ -43,20 +38,19 @@ export default function Home() {
       <div className="border-b border-black p-2 flex justify-between items-center text-sm">
         <span>Welcome To</span>
         <div className="flex gap-2">
-          <button onClick={()=>handleLogin('/dashboard')} className="border border-black px-3 py-1">SIGN IN USER</button>
+          <button onClick={()=>handleLogin('/dashboard')} className="border border-black px-3 py-1">SIGNIN USER</button>
           <button onClick={()=>handleLogin('/seller')} className="border border-black px-3 py-1">Sign In Seller</button>
-          <button onClick={()=>handleLogin('/agent')} className="border border-black px-3 py-1">Apply For MullaBase Agent</button>
-          <button onClick={()=>handleLogin('/admin')} className="border border-black px-3 py-1">Backend Sign In</button>
+          <button onClick={()=>handleLogin('/agent')} className="border border-black px-3 py-1">Sign In Agent</button>
+          <button onClick={()=>handleLogin('/admin')} className="border border-black px-3 py-1">Admin</button>
         </div>
       </div>
-      <div className="border-b border-black p-4">
-        <h1 className="text-6xl">MullaBase</h1>
-        <h2 className="text-xl mt-2">Instant Spend & Earn Marketplace.</h2>
+      <div className="border-b border-black p-4 flex justify-between items-center">
+        <div><h1 className="text-6xl">MullaBase</h1><h2 className="text-xl mt-2">Instant Spend & Earn Marketplace.</h2></div>
+        <div className="border border-black w-32 h-24 flex items-center justify-center text-xs text-center">Image of a Cart & Gifts & Parcels</div>
       </div>
       <div className="border-b border-black p-2 text-center font-bold">SIM REGISTRATION</div>
-      <div className="border-b border-black p-4 text-sm">
-        <p>Your gateway to flexible Market access on the go. Start your affiliate journey with MullaBase's Fulfillment Agent Affiliation program, earn passive income as you balance your work-live experience.</p>
-      </div>
+      <div className="border-b border-black p-4 text-sm"><p>Your gateway to flexible Market access on the go. Start your affiliate journey with MullaBase's Fulfillment Agent Affiliation program, earn passive income as you balance your work-live experience. Spend, refer, sell, swap, vote or take part to Earn points that you can Cashout via Mpesa/E-Wallet or Buy Airtime.</p></div>
+      <div className="border-b border-black p-2 text-center">DAILY PICKS ADVERTS BLOG x1</div>
       {!showJoinForm? (
         <div className="border-b border-black p-4">
           <h3 className="text-2xl mb-4 text-center">JOIN & Grab 20 FREE Points</h3>
@@ -82,10 +76,8 @@ export default function Home() {
           </div>
         </div>
       )}
-      <div className="p-2 text-xs flex justify-between">
-        <span>Privacy | Terms | Contact Support</span>
-        <span>Born in Lesotho, Open to Africa</span>
-      </div>
+      <div className="border-b border-black p-2 text-center">DAILY PICKS ADVERTS BLOG x1</div>
+      <div className="p-2 text-xs flex justify-between"><span>Privacy | Terms | Contact Support</span><span>Born in Lesotho | Open to Africa</span></div>
     </main>
   )
-                                            }
+      }
