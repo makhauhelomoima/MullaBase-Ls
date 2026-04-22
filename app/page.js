@@ -16,12 +16,12 @@ export default function Home() {
         {/* Hero */}
         <h2 className="text-4xl font-black text-orange-900 mb-2">MullaBase</h2>
         <p className="text-orange-700 text-sm">Instant Marketplace | Spend & Earn</p>
-        <p className="text-orange-700 text-sm font-bold mt-1">Join & get M10 FREE!</p>
+        <p className="text-orange-700 text-sm font-bold mt-1">Join & get 20 points FREE!</p>
 
         {/* Button Grid - OG Colors */}
         <div className="grid grid-cols-2 gap-3 mt-6">
           <Link href="/join" className="bg-orange-500 text-white p-4 rounded-xl font-bold text-sm shadow-md">
-            Join & get M10 FREE! 🎁
+            Join & get 20 points FREE! 🎁
           </Link>
           <Link href="/masterclass" className="bg-orange-500 text-white p-4 rounded-xl font-bold text-sm shadow-md">
             MASTERCLASS ACCOMMODATION<br/>~ Book Now
@@ -51,7 +51,7 @@ export default function Home() {
 
         {/* Footer Text */}
         <div className="mt-8 text-orange-700 text-xs space-y-1">
-          <p>Sell on MullaBase & earn | Share = M1 per friend</p>
+          <p>Sell on MullaBase & earn | Share = 10 points per friend</p>
           <p>100 points = M10/R10/P10 | Withdraw to cash or airtime</p>
         </div>
 
