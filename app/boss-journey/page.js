@@ -18,7 +18,6 @@ export default function BossJourneyPage() {
           </p>
         </div>
 
-        {/* CASE STUDY SECTION */}
         <section className="py-16 bg-zinc-950 rounded-3xl mb-16 border border-zinc-800">
           <div className="max-w-4xl mx-auto px-4">
             <div className="text-center mb-12">
@@ -55,7 +54,6 @@ export default function BossJourneyPage() {
           </div>
         </section>
 
-        {/* 7-DAY JOURNEY MAP */}
         <section className="py-16 bg-zinc-950 rounded-3xl mb-16">
           <div className="max-w-4xl mx-auto px-4 text-center">
             <h2 className="text-4xl font-black mb-4">Your 7-Day Journey</h2>
@@ -68,7 +66,7 @@ export default function BossJourneyPage() {
                 {day: 4, name: 'Landing', desc: 'Create your page'},
                 {day: 5, name: 'Email', desc: 'Automate sequences'},
                 {day: 6, name: 'Launch', desc: 'Go live!'},
-                {day: 7, name: 'First Lead', desc: 'Celebrate! 🎉'}
+                {day: 7, name: 'First Lead', desc: 'Celebrate!'}
               ].map((item) => (
                 <div key={item.day} className="text-center">
                   <div className="w-12 h-12 bg-amber-500 rounded-full flex items-center justify-center mx-auto mb-2 font-black text-black">
@@ -83,7 +81,6 @@ export default function BossJourneyPage() {
           </div>
         </section>
 
-        {/* PRICING CARDS */}
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           
           <div className="border border-zinc-800 rounded-3xl p-8 bg-zinc-950/50">
@@ -158,8 +155,8 @@ export default function BossJourneyPage() {
               Get Pro Access
             </Link>
           </div>
+        </div>
 
-        {/* TRUST BOX */}
         <div className="mt-20 p-8 bg-zinc-900 rounded-3xl border border-zinc-800">
           <h3 className="text-2xl font-black mb-4 text-center">Trust Box</h3>
           <div className="grid md:grid-cols-3 gap-6 text-sm">
