@@ -8,22 +8,49 @@ export default function BossJourneyPage() {
         
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 rounded-full px-4 py-2 mb-6">
-            <span className="text-sm font-bold text-amber-500">👑 MULLABASE EXCLUSIVE</span>
+            <span className="text-sm font-bold text-amber-500">👑 MULLABASE GLOBAL</span>
           </div>
           <h1 className="text-5xl md:text-7xl font-black mb-4 tracking-tight">
             THE BOSS JOURNEY
           </h1>
           <p className="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto">
-            The complete playbook to launch and monetize in Lesotho. No theory. Real revenue. Real fast.
+            The complete playbook to launch and monetize online. Built in Maseru. Sold worldwide. No theory. Real revenue. Real fast.
           </p>
         </div>
+
+        <section className="py-16 bg-zinc-950 rounded-3xl mb-16">
+          <div className="max-w-4xl mx-auto px-4 text-center">
+            <h2 className="text-4xl font-black mb-4">Your 7-Day Journey</h2>
+            <p className="text-zinc-400 mb-12">From zero to your first lead in just one week</p>
+            <div className="grid grid-cols-2 md:grid-cols-7 gap-4 mb-8">
+              {[
+                {day: 1, name: 'Setup', desc: 'Create your accounts'},
+                {day: 2, name: 'Content', desc: 'Build your guide'},
+                {day: 3, name: 'Funnel', desc: 'Set up automation'},
+                {day: 4, name: 'Landing', desc: 'Create your page'},
+                {day: 5, name: 'Email', desc: 'Automate sequences'},
+                {day: 6, name: 'Launch', desc: 'Go live!'},
+                {day: 7, name: 'First Lead', desc: 'Celebrate! 🎉'}
+              ].map((item) => (
+                <div key={item.day} className="text-center">
+                  <div className="w-12 h-12 bg-amber-500 rounded-full flex items-center justify-center mx-auto mb-2 font-black text-black">
+                    {item.day}
+                  </div>
+                  <p className="font-bold text-sm">{item.name}</p>
+                  <p className="text-xs text-zinc-500">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+            <p className="text-zinc-300">I did this 18-24 April 2026 from my phone in Maseru. You can too.</p>
+          </div>
+        </section>
 
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           
           <div className="border border-zinc-800 rounded-3xl p-8 bg-zinc-950/50">
             <div className="mb-8">
-              <h2 className="text-2xl font-bold mb-2">Boss Journey Starter</h2>
-              <p className="text-zinc-500 mb-6">For solo founders starting from zero</p>
+              <h2 className="text-2xl font-bold mb-2">MullaBase Starter Vault</h2>
+              <p className="text-zinc-500 mb-6">Launch your first digital income stream in 7 days</p>
               <div className="flex items-baseline gap-2">
                 <span className="text-6xl font-black">$50</span>
                 <span className="text-zinc-500">USD one-time</span>
@@ -32,11 +59,13 @@ export default function BossJourneyPage() {
             
             <div className="space-y-4 mb-8">
               {[
-                'Full Boss Journey playbook PDF',
-                'Lesotho business registration guide', 
-                'Ecocash + M-Pesa payment setups',
-                'Lifetime access + all future updates',
-                'Private Telegram founder group'
+                'AI 101 - Understand AI before everyone else does',
+                'AI TOOLS: Cheat Sheet For Beginners - My exact toolkit',
+                '5+ Passive Income Ideas for Financial Relief - Built for Lesotho',
+                '24 Passive Income Streams - Pick 1 tonight. Tools + steps included',
+                'MullaBase Blueprint V1 - My unfiltered notes from building this site',
+                'Red Velvet Money Cake Tutorial - Turn M300 into M750',
+                '30-day money-back guarantee'
               ].map((item) => (
                 <div key={item} className="flex items-start gap-3">
                   <span className="text-green-500 mt-0.5">✓</span>
@@ -59,8 +88,8 @@ export default function BossJourneyPage() {
             </div>
             
             <div className="mb-8">
-              <h2 className="text-2xl font-bold mb-2">Boss Journey Pro</h2>
-              <p className="text-amber-500/80 mb-6">For serious bosses scaling fast</p>
+              <h2 className="text-2xl font-bold mb-2">MullaBase Ark - Builder Edition</h2>
+              <p className="text-amber-500/80 mb-6">Launch + scale to $5k/month with done-for-you assets</p>
               <div className="flex items-baseline gap-2">
                 <span className="text-6xl font-black">$100</span>
                 <span className="text-zinc-500">USD one-time</span>
@@ -69,11 +98,12 @@ export default function BossJourneyPage() {
             
             <div className="space-y-4 mb-8">
               {[
-                'Everything in Starter tier',
-                '60-min 1-on-1 strategy call with Mulla',
-                'Done-for-you legal templates LAA ready',
-                'Priority WhatsApp support',
-                'All future Boss products included free'
+                'Everything in Starter Vault - All 6 PDFs above',
+                '60-Min 1-on-1 Strategy Call with Mulla - We pick your stream + map 7 days',
+                'Personal Review: Send me your first product draft, I record video feedback',
+                'Private WhatsApp - Ark Builders: Only buyers. No lurkers. Real wins',
+                'MullaBase Blueprint - All Future Updates: Watch me build live',
+                '30-day money-back guarantee'
               ].map((item) => (
                 <div key={item} className="flex items-start gap-3">
                   <span className="text-amber-500 mt-0.5">✓</span>
@@ -92,12 +122,30 @@ export default function BossJourneyPage() {
 
         </div>
 
+        <div className="mt-20 p-8 bg-zinc-900 rounded-3xl border border-zinc-800">
+          <h3 className="text-2xl font-black mb-4 text-center">Trust Box</h3>
+          <div className="grid md:grid-cols-3 gap-6 text-sm">
+            <div className="text-center">
+              <p className="text-green-500 font-bold mb-2">✅ What you get TODAY</p>
+              <p className="text-zinc-400">6 PDFs + 1 Tutorial delivered instantly to email</p>
+            </div>
+            <div className="text-center">
+              <p className="text-red-500 font-bold mb-2">❌ What you DON'T get</p>
+              <p className="text-zinc-400">Guaranteed riches, MLM recruiting, fake screenshots</p>
+            </div>
+            <div className="text-center">
+              <p className="text-amber-500 font-bold mb-2">📧 Questions?</p>
+              <p className="text-zinc-400">WhatsApp: +26657031600. I reply personally.</p>
+            </div>
+          </div>
+        </div>
+
         <div className="text-center mt-20">
           <p className="text-zinc-600 text-sm mb-2">
-            Secure checkout powered by Paddle • Instant access after payment
+            Secure global checkout powered by Paddle • Instant access after payment
           </p>
           <p className="text-zinc-700 text-xs">
-            MullaBase. Lesotho's Pride. Africa's Treasure!
+            MullaBase. Lesotho's Pride. The World's Treasure!
           </p>
         </div>
         
