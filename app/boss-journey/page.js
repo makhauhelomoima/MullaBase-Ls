@@ -182,9 +182,4 @@ export default function BossJourneyPage() {
           <p className="text-zinc-700 text-xs">
             MullaBase. Lesotho's Pride. The World's Treasure!
           </p>
-        </div>
-        
-      </div>
-    </main>
-  )
-    }
+        </div
