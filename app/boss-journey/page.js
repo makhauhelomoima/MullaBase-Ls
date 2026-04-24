@@ -8,7 +8,7 @@ export default function BossJourneyPage() {
         
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 rounded-full px-4 py-2 mb-6">
-            <span className="text-sm font-bold text-amber-500">👑 MULLABASE GLOBAL</span>
+            <span className="text-sm font-bold text-amber-500">MULLABASE GLOBAL</span>
           </div>
           <h1 className="text-5xl md:text-7xl font-black mb-4 tracking-tight">
             THE BOSS JOURNEY
@@ -161,15 +161,15 @@ export default function BossJourneyPage() {
           <h3 className="text-2xl font-black mb-4 text-center">Trust Box</h3>
           <div className="grid md:grid-cols-3 gap-6 text-sm">
             <div className="text-center">
-              <p className="text-green-500 font-bold mb-2">✅ What you get TODAY</p>
+              <p className="text-green-500 font-bold mb-2">What you get TODAY</p>
               <p className="text-zinc-400">6 PDFs + 1 Tutorial delivered instantly to email</p>
             </div>
             <div className="text-center">
-              <p className="text-red-500 font-bold mb-2">❌ What you DON'T get</p>
+              <p className="text-red-500 font-bold mb-2">What you DON'T get</p>
               <p className="text-zinc-400">Guaranteed riches, MLM recruiting, fake screenshots</p>
             </div>
             <div className="text-center">
-              <p className="text-amber-500 font-bold mb-2">📧 Questions?</p>
+              <p className="text-amber-500 font-bold mb-2">Questions?</p>
               <p className="text-zinc-400">WhatsApp: +26657031600. I reply personally.</p>
             </div>
           </div>
@@ -182,4 +182,9 @@ export default function BossJourneyPage() {
           <p className="text-zinc-700 text-xs">
             MullaBase. Lesotho's Pride. The World's Treasure!
           </p>
-        </div
+        </div>
+        
+      </div>
+    </main>
+  )
+    }
