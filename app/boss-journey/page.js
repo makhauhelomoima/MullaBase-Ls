@@ -18,6 +18,44 @@ export default function BossJourneyPage() {
           </p>
         </div>
 
+        {/* CASE STUDY SECTION */}
+        <section className="py-16 bg-zinc-950 rounded-3xl mb-16 border border-zinc-800">
+          <div className="max-w-4xl mx-auto px-4">
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 rounded-full px-4 py-2 mb-4">
+                <span className="text-sm font-bold text-amber-500">REAL BUILD STORY</span>
+              </div>
+              <h2 className="text-4xl font-black mb-4">From Maseru Phone to Global Checkout in 7 Days</h2>
+              <p className="text-zinc-400">18th - 24th April 2026 | No laptop. No team. Just WhatsApp.</p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8 mb-8">
+              <div>
+                <h3 className="text-xl font-black text-amber-500 mb-3">THE UP</h3>
+                <p className="text-zinc-300 text-sm">18 April 2026. Phone in Maseru, M0 for laptop. No coding background. Just WiFi + WhatsApp.</p>
+              </div>
+              <div>
+                <h3 className="text-xl font-black text-red-500 mb-3">THE DOWNS</h3>
+                <p className="text-zinc-300 text-sm">Day 2: Build Failed. Day 3: Paddle rejected me. Day 6: Almost lied about "47-page PDF". Deleted it.</p>
+              </div>
+              <div>
+                <h3 className="text-xl font-black text-green-500 mb-3">THE WIN</h3>
+                <p className="text-zinc-300 text-sm">24 April: Live site. Black + gold. Paddle takes USD. 6 real PDFs. All mine. Instant download.</p>
+              </div>
+            </div>
+
+            <div className="text-center">
+              <Link 
+                href="/case-study"
+                className="text-amber-500 font-bold hover:underline"
+              >
+                Read Full 7-Day Breakdown + My Exact Errors →
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* 7-DAY JOURNEY MAP */}
         <section className="py-16 bg-zinc-950 rounded-3xl mb-16">
           <div className="max-w-4xl mx-auto px-4 text-center">
             <h2 className="text-4xl font-black mb-4">Your 7-Day Journey</h2>
@@ -45,6 +83,7 @@ export default function BossJourneyPage() {
           </div>
         </section>
 
+        {/* PRICING CARDS */}
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           
           <div className="border border-zinc-800 rounded-3xl p-8 bg-zinc-950/50">
@@ -120,8 +159,7 @@ export default function BossJourneyPage() {
             </Link>
           </div>
 
-        </div>
-
+        {/* TRUST BOX */}
         <div className="mt-20 p-8 bg-zinc-900 rounded-3xl border border-zinc-800">
           <h3 className="text-2xl font-black mb-4 text-center">Trust Box</h3>
           <div className="grid md:grid-cols-3 gap-6 text-sm">
