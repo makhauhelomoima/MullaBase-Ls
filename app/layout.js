@@ -1,8 +1,8 @@
 import './globals.css'
 
 export const metadata = {
-  title: 'MullaBase - Boss Journey',
-  description: 'Launch and monetize in Lesotho',
+  title: 'Boss Journey - MullaBase',
+  description: 'Launch your digital store in 7 days. Built in Maseru. Sold worldwide.',
 }
 
 export default function RootLayout({ children }) {
@@ -11,4 +11,4 @@ export default function RootLayout({ children }) {
       <body>{children}</body>
     </html>
   )
-    }
+}
