@@ -51,7 +51,7 @@ export default function CaseStudyPage() {
           <ol className="space-y-2">
             <li><strong>Ship ugly, fix live</strong> - My Day 4 site was trash. I fixed it Day 7.</li>
             <li><strong>Sell what exists</strong> - Your "MullaBase Blueprint V1" beats a fake "47-page PDF".</li>
-            <li><strong>Trust > Hype</strong> - Lesotho knows push-push. We show M-Pesa screenshots, not Lambos.</li>
+            <li><strong>Trust &gt; Hype</strong> - Lesotho knows push-push. We show M-Pesa screenshots, not Lambos.</li>
           </ol>
 
           <div className="bg-zinc-900 border border-amber-500/30 rounded-2xl p-8 my-12">
